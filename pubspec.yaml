@@ -12,8 +12,11 @@ dependencies:
     sdk: flutter
   get: ^3.13.1
   audioplayers: ^0.16.1
+  file_picker: ^2.0.9+1
+  path:
+  provider: ^3.0.0+1
 
-  # cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.0
 
 
 dev_dependencies:
@@ -21,3 +24,9 @@ dev_dependencies:
     sdk: flutter
 flutter:
   uses-material-design: true
+
+#  uses-material-designe: true
+  assets:
+    - images_logo/Pygus.jpg
+    - others_images/boca.jpg
+    - audio/bo.mp3

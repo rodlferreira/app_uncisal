@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatelessWidget {
+  AudioPlayer advancedPlayer = AudioPlayer();
+  AudioCache audioCache = AudioCache();
+  // get audioCache => null;
 
-  static const String _imageUrl = 'https://images.vexels.com/media/users/3/158265/isolated/preview/62610dcc828ec36764fc4bc18eb6a380-falando-f-mea-boca---cone-by-vexels.png';
+
+  // static const String _imageUrl = 'https://images.vexels.com/media/users/3/158265/isolated/preview/62610dcc828ec36764fc4bc18eb6a380-falando-f-mea-boca---cone-by-vexels.png';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.amberAccent,
       appBar: AppBar(
         title: Text('Fonoaudiologia'),
       ),
@@ -22,8 +29,8 @@ class HomeScreen extends StatelessWidget {
               constraints: const BoxConstraints(
                 maxWidth: 300
               ),
-              child: Image.network(
-                _imageUrl,
+              child: Image.asset(
+                'others_images/boca.jpg', fit: BoxFit.contain,
                 width: 280,
               )
             ),
@@ -37,7 +44,8 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SyllableButton(
-                  syllable: 'BO'
+                  syllable: 'BO',
+                  onPressed: () => audioCache.play('bo.mp3')
                 ),
                 SyllableButton(
                   syllable: 'CA'
@@ -50,7 +58,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.keyboard_voice,
-              color: Colors.grey,
+              color: Colors.black87,
             ),
             iconSize: 80,
             onPressed: () {

@@ -4,7 +4,7 @@ class SyllableButton extends StatelessWidget {
 
   final String syllable;
 
-  const SyllableButton({Key key, this.syllable}) : super(key: key);
+  const SyllableButton({Key key, this.syllable, Function() onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
