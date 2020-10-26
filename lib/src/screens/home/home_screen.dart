@@ -1,22 +1,29 @@
+import 'package:prototipo_app_uncisal/src/models/syllable.dart';
+import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_draggable.dart';
+import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_target.dart';
 import 'package:flutter/material.dart';
-import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+
+import 'home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  AudioPlayer advancedPlayer = AudioPlayer();
-  AudioCache audioCache = AudioCache();
-  // get audioCache => null;
-
-
-  // static const String _imageUrl = 'https://images.vexels.com/media/users/3/158265/isolated/preview/62610dcc828ec36764fc4bc18eb6a380-falando-f-mea-boca---cone-by-vexels.png';
 
   @override
   Widget build(BuildContext context) {
+    final HomeController controller = Get.find<HomeController>();
     return Scaffold(
       backgroundColor: Colors.amberAccent,
       appBar: AppBar(
         title: Text('Fonoaudiologia'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              controller.reset();
+            },
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,7 +37,8 @@ class HomeScreen extends StatelessWidget {
                 maxWidth: 300
               ),
               child: Image.asset(
-                'others_images/boca.jpg', fit: BoxFit.contain,
+                controller.word.imagePath, 
+                fit: BoxFit.contain,
                 width: 280,
               )
             ),
@@ -40,19 +48,34 @@ class HomeScreen extends StatelessWidget {
               horizontal: 14,
               vertical: 4
             ),
-            child: Row(
+            child: Obx(() => Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SyllableButton(
-                  syllable: 'BO',
-                  onPressed: () => audioCache.play('bo.mp3')
-                ),
-                SyllableButton(
-                  syllable: 'CA'
-                ),
-              ],
-            ),
+              children: controller.randomSyllables
+                .map<Widget>((Syllable syllable) 
+                  => SyllableDraggable(
+                      syllable: syllable,
+                      dropped: !controller.randomSyllables.contains(syllable)
+                    )).toList()
+            )),
           ),
+
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 14, right: 14,
+              top: 24
+            ),
+            child: Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: controller.word.syllables
+                  .map<Widget>((Syllable syllable) => SyllableTarget(
+                      syllable: syllable, 
+                      dropped: !controller.randomSyllables.contains(syllable),
+                    )).toList()
+              );
+            }),
+          ),
+
 
           const Spacer(flex: 5),
           IconButton(

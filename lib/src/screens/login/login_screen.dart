@@ -11,29 +11,28 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.amberAccent,
       body: SizedBox.expand(
-      child: Column(
-        // color: Colors.amberAccent,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-          height: 6 + MediaQuery.of(context).padding.top,
-      ),
-          Expanded(
-            flex: 6,
-            child: Image.asset('images_logo/Pygus.jpg', fit: BoxFit.contain),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 6),
-          child: const LoginForm(),
-          ),
-          const Spacer(),
+        child: Column(
+          // color: Colors.amberAccent,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 6 + MediaQuery.of(context).padding.top,
+            ),
+            Expanded(
+              flex: 6,
+              child: Image.asset('assets/images/logo/Pygus.jpg', fit: BoxFit.contain),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 6),
+              child: const LoginForm(),
+            ),
+            const Spacer(),
           ],
-    ),
-    ),
+        ),
+      ),
     );
-
-
   }
 }
