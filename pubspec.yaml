@@ -1,7 +1,7 @@
 name: prototipo_app_uncisal
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -10,13 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^3.13.1
-  audioplayers: ^0.16.1
-  file_picker: ^2.0.9+1
-  path:
-  provider: ^3.0.0+1
+  # cupertino_icons: ^1.0.0
 
-  cupertino_icons: ^1.0.0
+  get: ^3.15.0
+  audioplayers: ^0.16.2
+  file_picker: ^2.0.11
 
 
 dev_dependencies:
@@ -27,6 +25,6 @@ flutter:
 
 #  uses-material-designe: true
   assets:
-    - images_logo/Pygus.jpg
-    - others_images/boca.jpg
-    - audio/bo.mp3
+    - assets/images/logo/Pygus.jpg
+    - assets/images/words/boca.jpg
+    - assets/audio/bo.mp3
