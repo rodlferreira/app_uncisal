@@ -1,4 +1,4 @@
-com.example.prototipo_app_uncisal
+com.example.app_uncisal
 attr alpha
 attr font
 attr fontProviderAuthority
