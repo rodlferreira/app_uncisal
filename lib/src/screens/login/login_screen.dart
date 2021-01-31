@@ -16,8 +16,11 @@ class LoginScreen extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(bottom: 20, top: 20),
-                child: Image.asset('assets/images/logo/pygus-logo.png',
-                    height: 100, fit: BoxFit.contain),
+                child: Image.asset(
+                  'assets/images/logo/pygus-logo.png',
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
               ),
               Center(
                 child: LoginForm(),

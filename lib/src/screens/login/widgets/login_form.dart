@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatelessWidget {
-  // const LoginForm();
   final TextEditingController email = TextEditingController();
+
   final TextEditingController password = TextEditingController();
 
   @override
@@ -69,9 +71,63 @@ class LoginForm extends StatelessWidget {
                 'Entrar',
                 style: TextStyle(fontSize: 16),
               ),
-              onPressed: () {
-                Get.offNamed('/home');
+              onPressed: () async {
+                String msg = '';
+
+                // Check if e-mail and password was set
+                if (email.text == '' && password.text == '') {
+                  msg = 'Informe um e-mail e uma senha';
+                } else if (email.text == '') {
+                  msg = 'Informe um e-mail';
+                } else if (password.text == '') {
+                  msg = 'Informe uma senha';
+                } else {
+                  // Call api to login
+                  var apiResponse = await http.post(
+                    'https://pygus-api.herokuapp.com/auth/login',
+                    headers: {
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: jsonEncode({
+                      'email': email.text,
+                      'password': password.text,
+                    }),
+                  );
+                  var apiResponseObject = jsonDecode(apiResponse.body);
+
+                  // Check user authentication
+                  if (apiResponseObject['code'] == 200) {
+                    // ToDo: storage token and redirect to /home
+                    print(apiResponseObject['data']['token']);
+                    // Get.offNamed('/home');
+                  } else {
+                    msg = apiResponseObject['message'];
+                  }
+                }
+
+                // Show erro message in snackbar
+                if (msg != '') {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(msg),
+                    ),
+                  );
+                }
               },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Text('Não tem conta? '),
+                ),
+                Container(
+                  child: Text('Registre-se'),
+                ),
+              ],
             ),
           ),
         ],
