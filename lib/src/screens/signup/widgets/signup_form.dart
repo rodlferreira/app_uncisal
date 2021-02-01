@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginForm extends StatelessWidget {
+class SignupForm extends StatelessWidget {
   final TextEditingController email = TextEditingController();
 
   final TextEditingController password = TextEditingController();
+
+  final TextEditingController repeatPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,18 @@ class LoginForm extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            padding: EdgeInsets.only(
+              bottom: 30,
+            ),
+            child: Text(
+              'Cadastre-se',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Container(
             padding: EdgeInsets.only(bottom: 6),
             child: TextField(
@@ -58,6 +72,26 @@ class LoginForm extends StatelessWidget {
             ),
           ),
           Container(
+            padding: EdgeInsets.only(bottom: 12),
+            child: TextField(
+              obscureText: true,
+              controller: repeatPassword,
+              decoration: InputDecoration(
+                hintText: 'Repita a Senha',
+                filled: true,
+                fillColor: Color(0xffececec),
+                contentPadding: EdgeInsets.fromLTRB(14, 3, 8, 3),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
             width: double.infinity,
             child: RaisedButton(
               shape: RoundedRectangleBorder(
@@ -82,16 +116,19 @@ class LoginForm extends StatelessWidget {
                   msg = 'Informe um e-mail';
                 } else if (password.text == '') {
                   msg = 'Informe uma senha';
+                } else if (repeatPassword.text != password.text) {
+                  msg = 'As senhas devem ser iguais';
                 } else {
-                  // Call api to login
+                  // Call api to register
                   var apiResponse = await http.post(
-                    'https://pygus-api.herokuapp.com/auth/login',
+                    'https://pygus-api.herokuapp.com/auth/register',
                     headers: {
                       'Content-Type': 'application/json; charset=UTF-8',
                     },
                     body: jsonEncode({
                       'email': email.text,
                       'password': password.text,
+                      'isAdmin': false
                     }),
                   );
                   var apiResponseObject = jsonDecode(apiResponse.body);
@@ -127,15 +164,12 @@ class LoginForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Text('Não tem conta? '),
-                ),
-                Container(
                   child: GestureDetector(
                     onTap: () {
-                      Get.offNamed('/signup');
+                      Get.offNamed('/login');
                     },
                     child: Text(
-                      'Registre-se',
+                      'Voltar para o Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
