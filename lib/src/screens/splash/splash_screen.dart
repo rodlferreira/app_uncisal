@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _getAuthToken() async {
     final storage = new FlutterSecureStorage();
-    String token = await storage.read(key: '_token');
+    String token = await storage.read(key: 'authentication_token');
     if (token != null) {
       Get.offNamed('/home');
     } else {
