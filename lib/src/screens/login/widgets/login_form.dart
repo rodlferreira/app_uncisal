@@ -4,7 +4,14 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  bool isLoading = false;
+
   final TextEditingController email = TextEditingController();
 
   final TextEditingController password = TextEditingController();
@@ -68,11 +75,26 @@ class LoginForm extends StatelessWidget {
               color: Color.fromRGBO(0, 143, 151, 1.0),
               textColor: Colors.white,
               padding: EdgeInsets.all(12),
-              child: Text(
-                'Entrar',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: !isLoading
+                  ? Text(
+                      'Entrar',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  : SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white,
+                        ),
+                      ),
+                    ),
               onPressed: () async {
+                // Loading login button
+                setState(() {
+                  isLoading = true;
+                });
+
                 String msg = '';
 
                 // Check if e-mail and password was set
@@ -112,6 +134,11 @@ class LoginForm extends StatelessWidget {
 
                 // Show erro message in snackbar
                 if (msg != '') {
+                  // Close loading login button
+                  setState(() {
+                    isLoading = false;
+                  });
+
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text(msg),

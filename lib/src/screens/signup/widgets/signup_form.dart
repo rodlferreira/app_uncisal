@@ -4,7 +4,14 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class SignupForm extends StatelessWidget {
+class SignupForm extends StatefulWidget {
+  @override
+  _SignupFormState createState() => _SignupFormState();
+}
+
+class _SignupFormState extends State<SignupForm> {
+  bool isLoading = false;
+
   final TextEditingController email = TextEditingController();
 
   final TextEditingController password = TextEditingController();
@@ -102,11 +109,26 @@ class SignupForm extends StatelessWidget {
               color: Color.fromRGBO(0, 143, 151, 1.0),
               textColor: Colors.white,
               padding: EdgeInsets.all(12),
-              child: Text(
-                'Entrar',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: !isLoading
+                  ? Text(
+                      'Cadastrar',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  : SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white,
+                        ),
+                      ),
+                    ),
               onPressed: () async {
+                // Loading signup button
+                setState(() {
+                  isLoading = true;
+                });
+
                 String msg = '';
 
                 // Check if e-mail and password was set
@@ -149,6 +171,11 @@ class SignupForm extends StatelessWidget {
 
                 // Show erro message in snackbar
                 if (msg != '') {
+                  // Close loading signup button
+                  setState(() {
+                    isLoading = false;
+                  });
+
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text(msg),
