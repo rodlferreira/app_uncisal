@@ -28,7 +28,7 @@ class _SignupFormState extends State<SignupForm> {
         children: [
           Container(
             padding: EdgeInsets.only(
-              bottom: 30,
+              bottom: 10,
             ),
             child: Text(
               'Cadastre-se',
@@ -37,6 +37,12 @@ class _SignupFormState extends State<SignupForm> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              bottom: 30,
+            ),
+            child: Text('Informe o seu e-mail e senha para cadastrar'),
           ),
           Container(
             padding: EdgeInsets.only(bottom: 6),
@@ -191,12 +197,15 @@ class _SignupFormState extends State<SignupForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
+                  child: Text('Voltar para o '),
+                ),
+                Container(
                   child: GestureDetector(
                     onTap: () {
                       Get.offNamed('/login');
                     },
                     child: Text(
-                      'Voltar para o Login',
+                      'Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
