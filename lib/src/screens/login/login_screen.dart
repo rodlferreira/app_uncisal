@@ -9,23 +9,25 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 20, top: 20),
-                child: Image.asset(
-                  'assets/images/logo/pygus-logo.png',
-                  height: 100,
-                  fit: BoxFit.contain,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: 20, top: 20),
+                  child: Image.asset(
+                    'assets/images/logo/pygus-logo.png',
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
-              Center(
-                child: LoginForm(),
-              ),
-            ],
+                Center(
+                  child: LoginForm(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
