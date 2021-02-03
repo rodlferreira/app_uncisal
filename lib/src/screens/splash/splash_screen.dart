@@ -24,6 +24,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Color.fromRGBO(
+          222,
+          184,
+          33,
+          1,
+        ),
         body: Container(
           child: Center(
             child: Image.asset(
