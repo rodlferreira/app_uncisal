@@ -52,7 +52,9 @@ class _LevelChooseState extends State<LevelChoose> {
               ),
               Container(
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.offNamed('/task');
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
