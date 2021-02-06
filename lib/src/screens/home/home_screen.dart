@@ -1,9 +1,11 @@
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
+import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_draggable.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_target.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 
 import 'home_controller.dart';
 
@@ -12,220 +14,160 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
     return Scaffold(
-        backgroundColor: Color.fromRGBO(
-          0,
-          143,
-          151,
-          1,
-        ),
-        // appBar: AppBar(
-        //   title: Text('Fonoaudiologia'),
-        //   actions: [
-        //     IconButton(
-        //       icon: Icon(Icons.refresh),
-        //       onPressed: () {
-        //         controller.reset();
-        //       },
-        //     )
-        //   ],
-        // ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(40),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(
-                    222,
-                    184,
-                    33,
-                    1,
+      backgroundColor: Colors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 30,
+                    left: 10,
+                    right: 10,
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black87,
-                      spreadRadius: 1,
-                      blurRadius: 15,
-                      offset: Offset(
-                        0,
-                        5,
+                  child: Row(
+                    children: [
+                      Container(
+                        child: RaisedButton(
+                          onPressed: () {
+                            Get.offNamed('/home');
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          color: Color.fromRGBO(
+                            222,
+                            184,
+                            33,
+                            1,
+                          ),
+                          textColor: Colors.white,
+                          padding: EdgeInsets.all(12),
+                          child: Text('Voltar'),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Image.asset(
-                    controller.word.imagePath,
-                    fit: BoxFit.contain,
-                    width: 200,
+                    ],
                   ),
                 ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(
-                left: 40,
-                right: 40,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Draggable(
-                    childWhenDragging: Container(),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 1,
-                            blurRadius: 15,
-                            offset: Offset(
-                              0,
-                              5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'BO',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    feedback: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 1,
-                            blurRadius: 15,
-                            offset: Offset(
-                              0,
-                              5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'BO',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
+                Container(
+                  height: 200,
+                  child: Center(
+                    child: Image.asset(
+                      controller.word.imagePath,
+                      fit: BoxFit.contain,
+                      width: 200,
                     ),
                   ),
-                  Draggable(
-                    childWhenDragging: Container(),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 1,
-                            blurRadius: 15,
-                            offset: Offset(
-                              0,
-                              5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'CA',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    feedback: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 1,
-                            blurRadius: 15,
-                            offset: Offset(
-                              0,
-                              5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'CA',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: 25,
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 10,
+                        height: 40,
+                      ),
+                      SyllableButton(
+                        syllable: Syllable(
+                          name: 'BO',
+                          audioPath: 'assets/audio/bo.mp3',
+                        ),
+                        enable: true,
+                      ),
+                      SizedBox(
+                        width: 10,
+                        height: 40,
+                      ),
+                      SyllableButton(
+                        syllable: Syllable(
+                          name: 'CA',
+                          audioPath: 'assets/audio/bo.mp3',
+                        ),
+                        enable: true,
+                      ),
+                      SizedBox(
+                        width: 10,
+                        height: 40,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(40),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(
+                0,
+                143,
+                151,
+                1,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              child: Obx(() => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: controller.randomSyllables
-                      .map<Widget>((Syllable syllable) => SyllableDraggable(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: controller.randomSyllables
+                  .map<Widget>(
+                    (Syllable syllable) => Row(
+                      children: [
+                        SyllableButton(
                           syllable: syllable,
-                          dropped:
-                              !controller.randomSyllables.contains(syllable)))
-                      .toList())),
+                          enable: false,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        )
+                      ],
+                    ),
+                  )
+                  .toList(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 14, right: 14, top: 24),
-              child: Obx(() {
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: controller.word.syllables
-                        .map<Widget>((Syllable syllable) => SyllableTarget(
-                              syllable: syllable,
-                              dropped: !controller.randomSyllables
-                                  .contains(syllable),
-                            ))
-                        .toList());
-              }),
-            ),
-            const Spacer(flex: 5),
-            IconButton(
-              icon: Icon(
-                Icons.keyboard_voice,
-                color: Colors.black87,
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(30),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(
+                  0,
+                  143,
+                  151,
+                  1,
+                ),
               ),
-              iconSize: 80,
-              onPressed: () {},
+              child: RaisedButton(
+                onPressed: () {},
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                color: Color.fromRGBO(
+                  222,
+                  184,
+                  33,
+                  1,
+                ),
+                textColor: Colors.white,
+                padding: EdgeInsets.all(12),
+                child: Text('Próxima'),
+              ),
             ),
-            const Spacer(flex: 3),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

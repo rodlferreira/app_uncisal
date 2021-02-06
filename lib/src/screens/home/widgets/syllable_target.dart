@@ -7,19 +7,27 @@ import '../home_controller.dart';
 import 'syllable_button.dart';
 
 class SyllableTarget extends StatelessWidget {
-
   final Syllable syllable;
   final bool dropped;
 
-  const SyllableTarget({Key key, @required this.syllable, this.dropped=false}) : super(key: key);
+  const SyllableTarget({
+    Key key,
+    @required this.syllable,
+    this.dropped = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (dropped) {
       return Container(
-        height: 100,
-        width: 90,
-        color: Colors.green,
+        height: 70,
+        width: 70,
+        color: Color.fromRGBO(
+          222,
+          184,
+          33,
+          1,
+        ),
         alignment: Alignment.center,
         child: SyllableButton(
           syllable: syllable,
@@ -27,17 +35,28 @@ class SyllableTarget extends StatelessWidget {
       );
     }
     return Container(
-      height: 100,
-      width: 90,
-      color: Colors.red,
+      height: 70,
+      width: 70,
+      color: Color.fromRGBO(
+        222,
+        184,
+        33,
+        1,
+      ),
       child: DragTarget<Syllable>(
-        builder: (BuildContext context, List<Syllable> syllables, List<dynamic> rejected) 
-          => kEmptyBox,
+        builder: (
+          BuildContext context,
+          List<Syllable> syllables,
+          List<dynamic> rejected,
+        ) =>
+            kEmptyBox,
         onAccept: (Syllable dropSyllable) {
           Get.find<HomeController>().onAccept(dropSyllable);
         },
-        onWillAccept: (dropSyllable) => 
-          Get.find<HomeController>().onWillAccept(syllable, dropSyllable),
+        onWillAccept: (dropSyllable) => Get.find<HomeController>().onWillAccept(
+          syllable,
+          dropSyllable,
+        ),
       ),
     );
   }
