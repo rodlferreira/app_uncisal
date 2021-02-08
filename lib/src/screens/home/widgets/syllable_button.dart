@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 
-class SyllableButton extends StatelessWidget {
+class SyllableButton extends StatefulWidget {
   final Syllable syllable;
   final bool enable;
 
@@ -12,21 +12,38 @@ class SyllableButton extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _SyllableButtonState createState() => _SyllableButtonState();
+}
+
+class _SyllableButtonState extends State<SyllableButton> {
+  @override
   Widget build(BuildContext context) {
     return ButtonTheme(
       height: 40,
       minWidth: 60,
-      child: RaisedButton(
-        onPressed: enable ? () {} : null,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        // onPressed: widget.enable
+        //     ? () {
+        //         widget.syllable.audioPath.play();
+        //       }
+        //     : null,
+        // shape: RoundedRectangleBorder(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
+          color: widget.enable != false
+              ? Colors.white
+              : Color.fromRGBO(
+                  0,
+                  71,
+                  77,
+                  1,
+                ),
         ),
-        color: Colors.white,
         padding: EdgeInsets.all(10),
         child: Text(
-          syllable.name,
+          widget.syllable.name,
           style: TextStyle(
             fontSize: 20,
           ),
