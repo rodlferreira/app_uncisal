@@ -22,15 +22,18 @@ class _SyllableButtonState extends State<SyllableButton> {
       height: 40,
       minWidth: 60,
       child: Container(
-        // onPressed: widget.enable
-        //     ? () {
-        //         widget.syllable.audioPath.play();
-        //       }
-        //     : null,
-        // shape: RoundedRectangleBorder(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
+          // borderRadius: BorderRadius.all(
+          //   Radius.circular(5),
+          // ),
+          border: Border.all(
+            width: 1,
+            color: Color.fromRGBO(
+              0,
+              143,
+              151,
+              1,
+            ),
           ),
           color: widget.enable != false
               ? Colors.white

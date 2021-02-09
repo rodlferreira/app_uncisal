@@ -5,8 +5,10 @@ import 'dart:typed_data';
 import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 import 'package:prototipo_app_uncisal/src/models/word.dart';
+import 'package:prototipo_app_uncisal/src/screens/home/task_controller.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,6 +23,10 @@ class _TaskState extends State<Task> {
   List<Syllable> syllables;
   List<Syllable> syllablesChoosed;
   int index;
+
+  final controller = Get.put(
+    TaskController(),
+  );
 
   @override
   void initState() {
@@ -82,9 +88,14 @@ class _TaskState extends State<Task> {
                             .asMap()
                             .entries
                             .map<Widget>(
-                              (entry) => SyllableButton(
-                                syllable: entry.value,
-                                enable: true,
+                              (entry) => Container(
+                                padding: EdgeInsets.only(
+                                  right: 2,
+                                ),
+                                child: SyllableButton(
+                                  syllable: entry.value,
+                                  enable: true,
+                                ),
                               ),
                             )
                             .toList()
@@ -109,16 +120,32 @@ class _TaskState extends State<Task> {
                             GestureDetector(
                               onTap: () {
                                 if (task.syllablesChoosed[entry.key] == true) {
+                                  // Put syllable in list of chooseds syllables
                                   List<Syllable> localSyllablesChoosed =
                                       syllablesChoosed != null
                                           ? syllablesChoosed
                                           : [];
                                   localSyllablesChoosed.add(entry.value);
+
+                                  // Play audio
                                   entry.value.audioPath.play();
+
+                                  // Reload state
                                   setState(() {
                                     task.syllablesChoosed[entry.key] = false;
                                     syllablesChoosed = localSyllablesChoosed;
                                   });
+
+                                  // Check if tasks is correct
+                                  if (localSyllablesChoosed.length ==
+                                      syllables.length) {
+                                    Future.delayed(
+                                        Duration(
+                                          seconds: 2,
+                                        ),
+                                        () => controller.checkTask(
+                                            tasks, index, syllablesChoosed));
+                                  }
                                 }
                               },
                               child: SyllableButton(
@@ -152,7 +179,15 @@ class _TaskState extends State<Task> {
               padding: EdgeInsets.all(30),
               width: double.infinity,
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    // Refresh task
+                    task = controller.enableSyllables(tasks, index);
+                    syllables = controller
+                        .createRandomSyllables(tasks[index].syllables);
+                    syllablesChoosed = [];
+                  });
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -166,7 +201,7 @@ class _TaskState extends State<Task> {
                 ),
                 textColor: Colors.white,
                 padding: EdgeInsets.all(12),
-                child: Text('Próxima'),
+                child: Text('Refazer tarefa'),
               ),
             ),
           ),
@@ -227,22 +262,7 @@ class _TaskState extends State<Task> {
       tasks = localTasks;
       task = localTasks[0];
       index = 0;
-      syllables = createRandomSyllables(tasks[0].syllables);
+      syllables = controller.createRandomSyllables(tasks[0].syllables);
     });
-  }
-
-  // Random syllables
-  List<Syllable> createRandomSyllables(List<Syllable> syllables) {
-    final Random random = Random();
-    final List<Syllable> randomList = List.from(syllables);
-
-    for (int i = 0; i < syllables.length; i++) {
-      final int ind = random.nextInt(syllables.length);
-
-      final Syllable value = randomList[ind];
-      randomList[ind] = randomList[i];
-      randomList[i] = value;
-    }
-    return randomList;
   }
 }
