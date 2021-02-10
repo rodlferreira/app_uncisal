@@ -38,39 +38,37 @@ class TaskController extends GetxController {
   bool checkTask(List<Word> tasks, int index, List<Syllable> syllablesChoosed) {
     bool isCorrect = true;
     tasks[index].syllables.asMap().entries.forEach((entry) {
-      print(syllablesChoosed[entry.key].name);
-      print(entry.value.name);
       if (syllablesChoosed[entry.key].name != entry.value.name) {
         isCorrect = false;
       }
     });
-    if (isCorrect == true) {
-      Get.dialog(
-        AlertDialog(
-          backgroundColor: Colors.lightGreen,
-          contentTextStyle: TextStyle(
-            color: Colors.white,
-          ),
-          content: Text(
-            'Você conseguiu, parabéns!',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    } else {
-      Get.dialog(
-        AlertDialog(
-          backgroundColor: Colors.red,
-          contentTextStyle: TextStyle(
-            color: Colors.white,
-          ),
-          content: Text(
-            'Alguma coisa está errada, tente novamente!',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
+    // if (isCorrect == true) {
+    //   Get.dialog(
+    //     AlertDialog(
+    //       backgroundColor: Colors.lightGreen,
+    //       contentTextStyle: TextStyle(
+    //         color: Colors.white,
+    //       ),
+    //       content: Text(
+    //         'Você conseguiu, parabéns!',
+    //         textAlign: TextAlign.center,
+    //       ),
+    //     ),
+    //   );
+    // } else {
+    //   Get.dialog(
+    //     AlertDialog(
+    //       backgroundColor: Colors.red,
+    //       contentTextStyle: TextStyle(
+    //         color: Colors.white,
+    //       ),
+    //       content: Text(
+    //         'Alguma coisa está errada, tente novamente!',
+    //         textAlign: TextAlign.center,
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return isCorrect;
   }

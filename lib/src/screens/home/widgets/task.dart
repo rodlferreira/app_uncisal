@@ -139,12 +139,56 @@ class _TaskState extends State<Task> {
                                   // Check if tasks is correct
                                   if (localSyllablesChoosed.length ==
                                       syllables.length) {
+                                    bool isCorrect = controller.checkTask(
+                                        tasks, index, syllablesChoosed);
                                     Future.delayed(
-                                        Duration(
-                                          seconds: 2,
+                                      Duration(
+                                        seconds: 1,
+                                      ),
+                                      () => Get.dialog(
+                                        AlertDialog(
+                                          backgroundColor: isCorrect == true
+                                              ? Colors.lightGreen
+                                              : Colors.red,
+                                          contentTextStyle: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                          content: Text(
+                                            isCorrect == true
+                                                ? 'Você conseguiu, parabéns!'
+                                                : 'Alguma coisa está errada, tente novamente!',
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
-                                        () => controller.checkTask(
-                                            tasks, index, syllablesChoosed));
+                                      ).then(
+                                        (value) => {
+                                          if (isCorrect == true)
+                                            {
+                                              setState(() {
+                                                index = index + 1;
+                                                task = tasks[index];
+                                                syllables = controller
+                                                    .createRandomSyllables(
+                                                        tasks[index].syllables);
+                                                syllablesChoosed = [];
+                                              })
+                                            }
+                                          else
+                                            {
+                                              setState(() {
+                                                // Refresh task
+                                                task =
+                                                    controller.enableSyllables(
+                                                        tasks, index);
+                                                syllables = controller
+                                                    .createRandomSyllables(
+                                                        tasks[index].syllables);
+                                                syllablesChoosed = [];
+                                              })
+                                            }
+                                        },
+                                      ),
+                                    );
                                   }
                                 }
                               },
