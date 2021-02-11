@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audiofileplayer/audiofileplayer.dart';
@@ -119,7 +118,11 @@ class _TaskState extends State<Task> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (task.syllablesChoosed[entry.key] == true) {
+                                if (task.syllablesChoosed[entry.key] == true &&
+                                    task.syllables[syllablesChoosed != null
+                                            ? syllablesChoosed.length
+                                            : 0] ==
+                                        entry.value) {
                                   // Put syllable in list of chooseds syllables
                                   List<Syllable> localSyllablesChoosed =
                                       syllablesChoosed != null
