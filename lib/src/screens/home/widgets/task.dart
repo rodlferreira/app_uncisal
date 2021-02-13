@@ -150,22 +150,19 @@ class _TaskState extends State<Task> {
                                       ),
                                       () => Get.dialog(
                                         AlertDialog(
-                                          backgroundColor: isCorrect == true
-                                              ? Colors.lightGreen
-                                              : Colors.red,
+                                          backgroundColor: Colors.lightGreen,
                                           contentTextStyle: TextStyle(
                                             color: Colors.white,
                                           ),
                                           content: Text(
-                                            isCorrect == true
-                                                ? 'Você conseguiu, parabéns!'
-                                                : 'Alguma coisa está errada, tente novamente!',
+                                            'Você conseguiu, parabéns!',
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ).then(
                                         (value) => {
-                                          if (isCorrect == true)
+                                          if (isCorrect == true &&
+                                              tasks.length != (index + 1))
                                             {
                                               setState(() {
                                                 index = index + 1;
@@ -177,18 +174,7 @@ class _TaskState extends State<Task> {
                                               })
                                             }
                                           else
-                                            {
-                                              setState(() {
-                                                // Refresh task
-                                                task =
-                                                    controller.enableSyllables(
-                                                        tasks, index);
-                                                syllables = controller
-                                                    .createRandomSyllables(
-                                                        tasks[index].syllables);
-                                                syllablesChoosed = [];
-                                              })
-                                            }
+                                            {Get.offNamed('/success')}
                                         },
                                       ),
                                     );

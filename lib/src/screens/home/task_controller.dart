@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 import 'package:prototipo_app_uncisal/src/models/word.dart';
@@ -42,33 +41,6 @@ class TaskController extends GetxController {
         isCorrect = false;
       }
     });
-    // if (isCorrect == true) {
-    //   Get.dialog(
-    //     AlertDialog(
-    //       backgroundColor: Colors.lightGreen,
-    //       contentTextStyle: TextStyle(
-    //         color: Colors.white,
-    //       ),
-    //       content: Text(
-    //         'Você conseguiu, parabéns!',
-    //         textAlign: TextAlign.center,
-    //       ),
-    //     ),
-    //   );
-    // } else {
-    //   Get.dialog(
-    //     AlertDialog(
-    //       backgroundColor: Colors.red,
-    //       contentTextStyle: TextStyle(
-    //         color: Colors.white,
-    //       ),
-    //       content: Text(
-    //         'Alguma coisa está errada, tente novamente!',
-    //         textAlign: TextAlign.center,
-    //       ),
-    //     ),
-    //   );
-    // }
 
     return isCorrect;
   }
