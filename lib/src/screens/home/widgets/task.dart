@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -20,8 +21,9 @@ class _TaskState extends State<Task> {
   List<Word> tasks = List();
   Word task;
   List<Syllable> syllables;
-  List<Syllable> syllablesChoosed;
+  List<Syllable> syllablesChoosed = [];
   int index;
+  bool accepted = false;
 
   final controller = Get.put(
     TaskController(),
@@ -80,49 +82,67 @@ class _TaskState extends State<Task> {
               bottom: 25,
             ),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:
-                    syllablesChoosed != null && syllablesChoosed.length > 0
-                        ? syllablesChoosed
-                            .asMap()
-                            .entries
-                            .map<Widget>(
-                              (entry) => Container(
-                                padding: EdgeInsets.only(
-                                  right: 2,
-                                ),
-                                child: SyllableButton(
-                                  syllable: entry.value,
-                                  enable: true,
-                                ),
-                              ),
-                            )
-                            .toList()
-                        : [
-                            SizedBox(
-                              width: 10,
-                              height: 40,
-                            ),
-                          ]),
-          ),
-          Container(
-            padding: EdgeInsets.all(40),
-            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: syllables != null
-                  ? syllables
-                      .asMap()
-                      .entries
-                      .map<Widget>(
-                        (entry) => Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (task.syllablesChoosed[entry.key] == true &&
-                                    task.syllables[syllablesChoosed != null
-                                            ? syllablesChoosed.length
-                                            : 0] ==
-                                        entry.value) {
+              children:
+                  // syllablesChoosed != null && syllablesChoosed.length > 0
+                  task != null &&
+                          task.syllables != null &&
+                          task.syllables.length > 0
+                      // ? syllablesChoosed
+                      ? task.syllables
+                          .asMap()
+                          .entries
+                          .map<Widget>(
+                            (entry) => Container(
+                              padding: EdgeInsets.only(
+                                right: 10,
+                              ),
+                              child: DragTarget(
+                                builder: (context, list, list2) {
+                                  return DottedBorder(
+                                    color: Colors.grey[400],
+                                    strokeWidth: 1,
+                                    child: Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: syllablesChoosed != null &&
+                                              syllablesChoosed.length >
+                                                  entry.key &&
+                                              syllablesChoosed[entry.key] !=
+                                                  null
+                                          ? SyllableButton(
+                                              syllable: entry.value,
+                                              enable: true,
+                                            )
+                                          : Container(
+                                              height: 50,
+                                              width: 50,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  entry.value.name,
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.grey[400],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                  );
+                                },
+                                onWillAccept: (item) {
+                                  if (item == entry.value.name &&
+                                      entry.key == syllablesChoosed.length) {
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                },
+                                onAccept: (item) {
+                                  // Play audio
+                                  entry.value.audioPath.play();
+
                                   // Put syllable in list of chooseds syllables
                                   List<Syllable> localSyllablesChoosed =
                                       syllablesChoosed != null
@@ -130,12 +150,8 @@ class _TaskState extends State<Task> {
                                           : [];
                                   localSyllablesChoosed.add(entry.value);
 
-                                  // Play audio
-                                  entry.value.audioPath.play();
-
                                   // Reload state
                                   setState(() {
-                                    task.syllablesChoosed[entry.key] = false;
                                     syllablesChoosed = localSyllablesChoosed;
                                   });
 
@@ -179,12 +195,52 @@ class _TaskState extends State<Task> {
                                       ),
                                     );
                                   }
-                                }
-                              },
-                              child: SyllableButton(
-                                syllable: entry.value,
-                                enable: task.syllablesChoosed[entry.key],
+                                },
                               ),
+                            ),
+                          )
+                          .toList()
+                      : [
+                          SizedBox(
+                            width: 10,
+                            height: 40,
+                          ),
+                        ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: syllables != null
+                  ? syllables
+                      .asMap()
+                      .entries
+                      .map<Widget>(
+                        (entry) => Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // Play audio
+                                entry.value.audioPath.play();
+                              },
+                              child: syllablesChoosed != null &&
+                                      syllablesChoosed.contains(entry.value)
+                                  ? Container(
+                                      height: 50,
+                                    )
+                                  : Draggable(
+                                      child: SyllableButton(
+                                        syllable: entry.value,
+                                      ),
+                                      feedback: Material(
+                                        child: SyllableButton(
+                                          syllable: entry.value,
+                                        ),
+                                      ),
+                                      childWhenDragging: Container(),
+                                      data: entry.value.name,
+                                    ),
                             ),
                             SizedBox(
                               width: 15,

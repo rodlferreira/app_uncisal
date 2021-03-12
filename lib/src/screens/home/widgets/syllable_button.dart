@@ -45,10 +45,13 @@ class _SyllableButtonState extends State<SyllableButton> {
                 ),
         ),
         padding: EdgeInsets.all(10),
-        child: Text(
-          widget.syllable.name,
-          style: TextStyle(
-            fontSize: 20,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            widget.syllable.name,
+            style: TextStyle(
+              fontSize: 20,
+            ),
           ),
         ),
       ),
