@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:glitters/glitters.dart';
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 import 'package:prototipo_app_uncisal/src/models/word.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/task_controller.dart';
@@ -83,40 +84,51 @@ class _TaskState extends State<Task> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                  // syllablesChoosed != null && syllablesChoosed.length > 0
-                  task != null &&
-                          task.syllables != null &&
-                          task.syllables.length > 0
-                      // ? syllablesChoosed
-                      ? task.syllables
-                          .asMap()
-                          .entries
-                          .map<Widget>(
-                            (entry) => Container(
-                              padding: EdgeInsets.only(
-                                right: 10,
-                              ),
-                              child: DragTarget(
-                                builder: (context, list, list2) {
-                                  return DottedBorder(
-                                    color: Colors.grey[400],
-                                    strokeWidth: 1,
-                                    child: Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: syllablesChoosed != null &&
-                                              syllablesChoosed.length >
-                                                  entry.key &&
-                                              syllablesChoosed[entry.key] !=
-                                                  null
-                                          ? SyllableButton(
+              children: task != null &&
+                      task.syllables != null &&
+                      task.syllables.length > 0
+                  ? task.syllables
+                      .asMap()
+                      .entries
+                      .map<Widget>(
+                        (entry) => Container(
+                          padding: EdgeInsets.only(
+                            right: 10,
+                          ),
+                          child: DragTarget(
+                            builder: (context, list, list2) {
+                              return DottedBorder(
+                                color: Colors.grey[400],
+                                strokeWidth: 1,
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: syllablesChoosed != null &&
+                                          syllablesChoosed.length > entry.key &&
+                                          syllablesChoosed[entry.key] != null
+                                      ? Stack(
+                                          children: [
+                                            SyllableButton(
                                               syllable: entry.value,
                                               enable: true,
-                                            )
-                                          : Container(
+                                              isFonetic:
+                                                  entry.key == 0 ? true : false,
+                                              color: entry.key == 0
+                                                  ? Colors.green
+                                                  : Colors.white,
+                                            ),
+                                          ],
+                                        )
+                                      : Stack(
+                                          children: [
+                                            Container(
                                               height: 50,
                                               width: 50,
+                                              decoration: BoxDecoration(
+                                                color: entry.key == 0
+                                                    ? Colors.greenAccent[100]
+                                                    : null,
+                                              ),
                                               child: Align(
                                                 alignment: Alignment.center,
                                                 child: Text(
@@ -128,84 +140,105 @@ class _TaskState extends State<Task> {
                                                 ),
                                               ),
                                             ),
-                                    ),
-                                  );
-                                },
-                                onWillAccept: (item) {
-                                  if (item == entry.value.name &&
-                                      entry.key == syllablesChoosed.length) {
-                                    return true;
-                                  } else {
-                                    return false;
-                                  }
-                                },
-                                onAccept: (item) {
-                                  // Play audio
-                                  entry.value.audioPath.play();
-
-                                  // Put syllable in list of chooseds syllables
-                                  List<Syllable> localSyllablesChoosed =
-                                      syllablesChoosed != null
-                                          ? syllablesChoosed
-                                          : [];
-                                  localSyllablesChoosed.add(entry.value);
-
-                                  // Reload state
-                                  setState(() {
-                                    syllablesChoosed = localSyllablesChoosed;
-                                  });
-
-                                  // Check if tasks is correct
-                                  if (localSyllablesChoosed.length ==
-                                      syllables.length) {
-                                    bool isCorrect = controller.checkTask(
-                                        tasks, index, syllablesChoosed);
-                                    Future.delayed(
-                                      Duration(
-                                        seconds: 1,
-                                      ),
-                                      () => Get.dialog(
-                                        AlertDialog(
-                                          backgroundColor: Colors.lightGreen,
-                                          contentTextStyle: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                          content: Text(
-                                            'Você conseguiu, parabéns!',
-                                            textAlign: TextAlign.center,
-                                          ),
+                                            entry.key == 0
+                                                ? Glitters(
+                                                    interval: Duration(
+                                                        milliseconds: 300),
+                                                    maxOpacity: 0.7,
+                                                    color: Colors.orange,
+                                                  )
+                                                : Container(),
+                                            entry.key == 0
+                                                ? Glitters(
+                                                    duration: Duration(
+                                                        milliseconds: 200),
+                                                    outDuration: Duration(
+                                                        milliseconds: 500),
+                                                    interval: Duration.zero,
+                                                    color: Colors.white,
+                                                    maxOpacity: 0.5,
+                                                  )
+                                                : Container(),
+                                          ],
                                         ),
-                                      ).then(
-                                        (value) => {
-                                          if (isCorrect == true &&
-                                              tasks.length != (index + 1))
-                                            {
-                                              setState(() {
-                                                index = index + 1;
-                                                task = tasks[index];
-                                                syllables = controller
-                                                    .createRandomSyllables(
-                                                        tasks[index].syllables);
-                                                syllablesChoosed = [];
-                                              })
-                                            }
-                                          else
-                                            {Get.offNamed('/success')}
-                                        },
+                                ),
+                              );
+                            },
+                            onWillAccept: (item) {
+                              if (item == entry.value.name &&
+                                  entry.key == syllablesChoosed.length) {
+                                return true;
+                              } else {
+                                return false;
+                              }
+                            },
+                            onAccept: (item) {
+                              // Play audio
+                              entry.value.audioPath.play();
+
+                              // Put syllable in list of chooseds syllables
+                              List<Syllable> localSyllablesChoosed =
+                                  syllablesChoosed != null
+                                      ? syllablesChoosed
+                                      : [];
+                              localSyllablesChoosed.add(entry.value);
+
+                              // Reload state
+                              setState(() {
+                                syllablesChoosed = localSyllablesChoosed;
+                              });
+
+                              // Check if tasks is correct
+                              if (localSyllablesChoosed.length ==
+                                  syllables.length) {
+                                bool isCorrect = controller.checkTask(
+                                    tasks, index, syllablesChoosed);
+                                Future.delayed(
+                                  Duration(
+                                    seconds: 1,
+                                  ),
+                                  () => Get.dialog(
+                                    AlertDialog(
+                                      backgroundColor: Colors.lightGreen,
+                                      contentTextStyle: TextStyle(
+                                        color: Colors.white,
                                       ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          )
-                          .toList()
-                      : [
-                          SizedBox(
-                            width: 10,
-                            height: 40,
+                                      content: Text(
+                                        'Você conseguiu, parabéns!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ).then(
+                                    (value) => {
+                                      if (isCorrect == true &&
+                                          tasks.length != (index + 1))
+                                        {
+                                          setState(() {
+                                            index = index + 1;
+                                            task = tasks[index];
+                                            syllables = controller
+                                                .createRandomSyllables(
+                                                    tasks[index].syllables);
+                                            syllablesChoosed = [];
+                                          })
+                                        }
+                                      else
+                                        {Get.offNamed('/success')}
+                                    },
+                                  ),
+                                );
+                              }
+                            },
                           ),
-                        ],
+                        ),
+                      )
+                      .toList()
+                  : [
+                      SizedBox(
+                        width: 10,
+                        height: 40,
+                      ),
+                    ],
             ),
           ),
           Container(
@@ -232,10 +265,12 @@ class _TaskState extends State<Task> {
                                   : Draggable(
                                       child: SyllableButton(
                                         syllable: entry.value,
+                                        color: Colors.white,
                                       ),
                                       feedback: Material(
                                         child: SyllableButton(
                                           syllable: entry.value,
+                                          color: Colors.white,
                                         ),
                                       ),
                                       childWhenDragging: Container(),
