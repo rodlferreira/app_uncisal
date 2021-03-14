@@ -5,14 +5,14 @@ import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 class SyllableButton extends StatefulWidget {
   Syllable syllable;
   bool enable;
-  bool isFonetic;
+  bool isPhoneme;
   Color color;
 
   SyllableButton({
     Key key,
     this.syllable,
     this.enable,
-    this.isFonetic,
+    this.isPhoneme,
     this.color,
   }) : super(key: key);
 
@@ -51,21 +51,21 @@ class _SyllableButtonState extends State<SyllableButton> {
               child: Text(
                 widget.syllable.name,
                 style: TextStyle(
-                  fontSize: 20,
-                  color: widget.isFonetic == true ? Colors.white : null,
-                  fontWeight: widget.isFonetic == true ? FontWeight.bold : null,
+                  fontSize: 18,
+                  color: widget.isPhoneme == true ? Colors.white : null,
+                  // fontWeight: widget.isPhoneme == true ? FontWeight.bold : null,
                 ),
               ),
             ),
           ),
-          widget.isFonetic == true
+          widget.isPhoneme == true
               ? Glitters(
                   interval: Duration(milliseconds: 300),
                   maxOpacity: 0.7,
                   color: Colors.orange,
                 )
               : Container(),
-          widget.isFonetic == true
+          widget.isPhoneme == true
               ? Glitters(
                   duration: Duration(milliseconds: 200),
                   outDuration: Duration(milliseconds: 500),

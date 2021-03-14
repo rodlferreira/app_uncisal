@@ -102,7 +102,7 @@ class _TaskState extends State<Task> {
                                 strokeWidth: 1,
                                 child: Container(
                                   height: 50,
-                                  width: 50,
+                                  width: 60,
                                   child: syllablesChoosed != null &&
                                           syllablesChoosed.length > entry.key &&
                                           syllablesChoosed[entry.key] != null
@@ -111,9 +111,8 @@ class _TaskState extends State<Task> {
                                             SyllableButton(
                                               syllable: entry.value,
                                               enable: true,
-                                              isFonetic:
-                                                  entry.key == 0 ? true : false,
-                                              color: entry.key == 0
+                                              isPhoneme: entry.value.isPhoneme,
+                                              color: entry.value.isPhoneme
                                                   ? Colors.green
                                                   : Colors.white,
                                             ),
@@ -123,9 +122,9 @@ class _TaskState extends State<Task> {
                                           children: [
                                             Container(
                                               height: 50,
-                                              width: 50,
+                                              width: 60,
                                               decoration: BoxDecoration(
-                                                color: entry.key == 0
+                                                color: entry.value.isPhoneme
                                                     ? Colors.greenAccent[100]
                                                     : null,
                                               ),
@@ -140,7 +139,7 @@ class _TaskState extends State<Task> {
                                                 ),
                                               ),
                                             ),
-                                            entry.key == 0
+                                            entry.value.isPhoneme
                                                 ? Glitters(
                                                     interval: Duration(
                                                         milliseconds: 300),
@@ -148,7 +147,7 @@ class _TaskState extends State<Task> {
                                                     color: Colors.orange,
                                                   )
                                                 : Container(),
-                                            entry.key == 0
+                                            entry.value.isPhoneme
                                                 ? Glitters(
                                                     duration: Duration(
                                                         milliseconds: 200),
@@ -371,8 +370,9 @@ class _TaskState extends State<Task> {
               ),
             );
             return Syllable(
-              name: entry.value.toUpperCase(),
+              name: entry.value['syllable'].toUpperCase(),
               audioPath: audioPath,
+              isPhoneme: entry.value['isPhoneme'],
             );
           }).toList(),
           syllablesChoosed: el['syllables'].map<bool>((syllable) {
