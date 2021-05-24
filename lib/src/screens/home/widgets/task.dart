@@ -14,6 +14,10 @@ import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.d
 import 'package:http/http.dart' as http;
 
 class Task extends StatefulWidget {
+  final tasks;
+  Task({
+    this.tasks,
+  });
   @override
   _TaskState createState() => _TaskState();
 }
@@ -23,7 +27,7 @@ class _TaskState extends State<Task> {
   Word task;
   List<Syllable> syllables;
   List<Syllable> syllablesChoosed = [];
-  int index;
+  int index = 0;
   bool accepted = false;
 
   final controller = Get.put(
@@ -34,7 +38,7 @@ class _TaskState extends State<Task> {
   void initState() {
     super.initState();
 
-    getTasks();
+    getTask(index);
   }
 
   @override
@@ -49,25 +53,35 @@ class _TaskState extends State<Task> {
             ),
             height: 200,
             child: Center(
-              child: index != null
+              child: syllables != null && syllables.length > 0
                   ? Image.memory(
-                      tasks[index].imagePath,
+                      task.imagePath,
                       fit: BoxFit.contain,
                       width: 200,
                     )
-                  : SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color.fromRGBO(
-                            0,
-                            143,
-                            151,
-                            1,
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color.fromRGBO(
+                                0,
+                                143,
+                                151,
+                                1,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Text('Carregando próxima tarefa...')
+                      ],
                     ),
             ),
           ),
@@ -84,9 +98,7 @@ class _TaskState extends State<Task> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: task != null &&
-                      task.syllables != null &&
-                      task.syllables.length > 0
+              children: syllables != null && syllables.length > 0
                   ? task.syllables
                       .asMap()
                       .entries
@@ -102,7 +114,7 @@ class _TaskState extends State<Task> {
                                 strokeWidth: 1,
                                 child: Container(
                                   height: 50,
-                                  width: 60,
+                                  width: entry.value.name.length > 2 ? 80 : 60,
                                   child: syllablesChoosed != null &&
                                           syllablesChoosed.length > entry.key &&
                                           syllablesChoosed[entry.key] != null
@@ -122,7 +134,9 @@ class _TaskState extends State<Task> {
                                           children: [
                                             Container(
                                               height: 50,
-                                              width: 60,
+                                              width: entry.value.name.length > 2
+                                                  ? 80
+                                                  : 60,
                                               decoration: BoxDecoration(
                                                 color: entry.value.isPhoneme
                                                     ? Colors.greenAccent[100]
@@ -133,7 +147,7 @@ class _TaskState extends State<Task> {
                                                 child: Text(
                                                   entry.value.name,
                                                   style: TextStyle(
-                                                    fontSize: 20,
+                                                    fontSize: 18,
                                                     color: Colors.grey[400],
                                                   ),
                                                 ),
@@ -191,10 +205,13 @@ class _TaskState extends State<Task> {
                               if (localSyllablesChoosed.length ==
                                   syllables.length) {
                                 bool isCorrect = controller.checkTask(
-                                    tasks, index, syllablesChoosed);
+                                    task, syllablesChoosed);
+                                syllablesChoosed
+                                    .forEach((syll) => syll.audioPath.play());
+
                                 Future.delayed(
                                   Duration(
-                                    seconds: 1,
+                                    seconds: 3,
                                   ),
                                   () => Get.dialog(
                                     AlertDialog(
@@ -212,14 +229,15 @@ class _TaskState extends State<Task> {
                                       if (isCorrect == true &&
                                           tasks.length != (index + 1))
                                         {
-                                          setState(() {
-                                            index = index + 1;
-                                            task = tasks[index];
-                                            syllables = controller
-                                                .createRandomSyllables(
-                                                    tasks[index].syllables);
-                                            syllablesChoosed = [];
-                                          })
+                                          // setState(() {
+                                          //   index = index + 1;
+                                          //   task = tasks[index];
+                                          //   syllables = controller
+                                          //       .createRandomSyllables(
+                                          //           tasks[index].syllables);
+                                          //   syllablesChoosed = [];
+                                          // })
+                                          getTask(index)
                                         }
                                       else
                                         {Get.offNamed('/success')}
@@ -299,15 +317,15 @@ class _TaskState extends State<Task> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              padding: EdgeInsets.all(30),
+              padding: EdgeInsets.fromLTRB(30, 10, 30, 5),
               width: double.infinity,
               child: RaisedButton(
                 onPressed: () {
                   setState(() {
                     // Refresh task
-                    task = controller.enableSyllables(tasks, index);
-                    syllables = controller
-                        .createRandomSyllables(tasks[index].syllables);
+                    task = controller.enableSyllables(task);
+                    syllables =
+                        controller.createRandomSyllables(task.syllables);
                     syllablesChoosed = [];
                   });
                 },
@@ -333,20 +351,28 @@ class _TaskState extends State<Task> {
     );
   }
 
-  // Get all tasks from API
-  void getTasks() async {
-    List<Word> localTasks = [];
+  // Get one task from API
+  void getTask(int localIndex) async {
+    setState(() {
+      syllables = [];
+      syllablesChoosed = [];
+    });
 
     final storage = new FlutterSecureStorage();
+    String id = widget.tasks[localIndex]['_id'];
+
     var apiResponse = await http.get(
-      'https://pygus-api.herokuapp.com/tasks',
+      'https://pygus-api.herokuapp.com/tasks/$id',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'access_token': await storage.read(key: 'authentication_token'),
       },
     );
     var apiResponseObject = jsonDecode(apiResponse.body);
-    apiResponseObject['data'].forEach((el) {
+    var el;
+
+    if (apiResponseObject['code'] != 400) {
+      el = apiResponseObject['data'];
       // Create Image String
       List<int> imageBuffer = [];
       el['image']['data']['data'].forEach((data) {
@@ -354,39 +380,35 @@ class _TaskState extends State<Task> {
       });
       String imgString = base64Encode(imageBuffer);
       Uint8List imgDecoded = base64Decode(imgString);
-
-      localTasks.add(
-        Word(
-          name: el['name'],
-          imagePath: imgDecoded,
-          syllables: el['syllables'].asMap().entries.map<Syllable>((entry) {
-            // Create Image String
-            Uint8List soundBuffer = base64Decode(
-              el['audios'][entry.key]['data'],
-            );
-            Audio audioPath = Audio.loadFromByteData(
-              ByteData.sublistView(
-                soundBuffer,
-              ),
-            );
-            return Syllable(
-              name: entry.value['syllable'].toUpperCase(),
-              audioPath: audioPath,
-              isPhoneme: entry.value['isPhoneme'],
-            );
-          }).toList(),
-          syllablesChoosed: el['syllables'].map<bool>((syllable) {
-            return true;
-          }).toList(),
-        ),
+      Word localTask = Word(
+        name: el['name'],
+        imagePath: imgDecoded,
+        syllables: el['syllables'].asMap().entries.map<Syllable>((entry) {
+          // Create Image String
+          Uint8List soundBuffer = base64Decode(
+            el['audios'][entry.key]['data'],
+          );
+          Audio audioPath = Audio.loadFromByteData(
+            ByteData.sublistView(
+              soundBuffer,
+            ),
+          );
+          return Syllable(
+            name: entry.value['syllable'].toUpperCase(),
+            audioPath: audioPath,
+            isPhoneme: entry.value['isPhoneme'],
+          );
+        }).toList(),
+        syllablesChoosed: el['syllables'].map<bool>((syllable) {
+          return true;
+        }).toList(),
       );
-    });
 
-    setState(() {
-      tasks = localTasks;
-      task = localTasks[0];
-      index = 0;
-      syllables = controller.createRandomSyllables(tasks[0].syllables);
-    });
+      setState(() {
+        task = localTask;
+        index = index + 1;
+        syllables = controller.createRandomSyllables(localTask.syllables);
+      });
+    }
   }
 }

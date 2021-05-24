@@ -21,22 +21,22 @@ class TaskController extends GetxController {
   }
 
   // Refresh task
-  Word enableSyllables(List<Word> tasks, int index) {
-    Word task = new Word(
-      name: tasks[index].name,
-      imagePath: tasks[index].imagePath,
-      syllables: tasks[index].syllables,
-      syllablesChoosed: tasks[index].syllables.map<bool>((syllable) {
+  Word enableSyllables(Word task) {
+    Word localTask = new Word(
+      name: task.name,
+      imagePath: task.imagePath,
+      syllables: task.syllables,
+      syllablesChoosed: task.syllables.map<bool>((syllable) {
         return true;
       }).toList(),
     );
-    return task;
+    return localTask;
   }
 
   // Check if task is correct
-  bool checkTask(List<Word> tasks, int index, List<Syllable> syllablesChoosed) {
+  bool checkTask(Word task, List<Syllable> syllablesChoosed) {
     bool isCorrect = true;
-    tasks[index].syllables.asMap().entries.forEach((entry) {
+    task.syllables.asMap().entries.forEach((entry) {
       if (syllablesChoosed[entry.key].name != entry.value.name) {
         isCorrect = false;
       }

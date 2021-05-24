@@ -4,6 +4,11 @@ import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/task.dart';
 
 class HomeScreen extends StatelessWidget {
+  final tasks;
+  HomeScreen({
+    this.tasks,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +62,9 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          Task(),
+          Task(
+            tasks: tasks,
+          ),
         ],
       ),
     );
