@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -29,6 +30,8 @@ class _TaskState extends State<Task> {
   List<Syllable> syllablesChoosed = [];
   int index = 0;
   bool accepted = false;
+  List<int> audiosSegs = [];
+  final AudioCache audioCache = AudioCache();
 
   final controller = Get.put(
     TaskController(),
@@ -185,9 +188,10 @@ class _TaskState extends State<Task> {
                                 return false;
                               }
                             },
-                            onAccept: (item) {
+                            onAccept: (item) async {
                               // Play audio
                               entry.value.audioPath.play();
+                              entry.value.audioPath..dispose();
 
                               // Put syllable in list of chooseds syllables
                               List<Syllable> localSyllablesChoosed =
@@ -206,12 +210,38 @@ class _TaskState extends State<Task> {
                                   syllables.length) {
                                 bool isCorrect = controller.checkTask(
                                     task, syllablesChoosed);
-                                syllablesChoosed
-                                    .forEach((syll) => syll.audioPath.play());
+
+                                await Future.delayed(
+                                    Duration(
+                                      seconds:
+                                          audiosSegs[audiosSegs.length - 1],
+                                    ), () {
+                                  audioCache.play('audios/success.mp3');
+                                });
+
+                                await Future.delayed(
+                                    Duration(
+                                      seconds: 1,
+                                    ), () {
+                                  task.audioPath[0].play();
+                                  task.audioPath[0]..dispose();
+                                });
+
+                                for (int index = 0;
+                                    index < (audiosSegs.length - 1);
+                                    index++) {
+                                  await Future.delayed(
+                                      Duration(
+                                        seconds: audiosSegs[index],
+                                      ), () {
+                                    task.audioPath[index + 1].play();
+                                    task.audioPath[index + 1]..dispose();
+                                  });
+                                }
 
                                 Future.delayed(
                                   Duration(
-                                    seconds: 3,
+                                    seconds: 1,
                                   ),
                                   () => Get.dialog(
                                     AlertDialog(
@@ -228,17 +258,7 @@ class _TaskState extends State<Task> {
                                     (value) => {
                                       if (isCorrect == true &&
                                           tasks.length != (index + 1))
-                                        {
-                                          // setState(() {
-                                          //   index = index + 1;
-                                          //   task = tasks[index];
-                                          //   syllables = controller
-                                          //       .createRandomSyllables(
-                                          //           tasks[index].syllables);
-                                          //   syllablesChoosed = [];
-                                          // })
-                                          getTask(index)
-                                        }
+                                        {getTask(index)}
                                       else
                                         {Get.offNamed('/success')}
                                     },
@@ -373,6 +393,9 @@ class _TaskState extends State<Task> {
 
     if (apiResponseObject['code'] != 400) {
       el = apiResponseObject['data'];
+
+      audiosSegs = [];
+
       // Create Image String
       List<int> imageBuffer = [];
       el['image']['data']['data'].forEach((data) {
@@ -383,6 +406,19 @@ class _TaskState extends State<Task> {
       Word localTask = Word(
         name: el['name'],
         imagePath: imgDecoded,
+        audioPath: el['syllables'].asMap().entries.map<Audio>((entry) {
+          // Create Image String
+          Uint8List soundBuffer = base64Decode(
+            el['audios'][entry.key]['data'],
+          );
+          Audio audioPath = Audio.loadFromByteData(
+            ByteData.sublistView(
+              soundBuffer,
+            ),
+            onDuration: (seg) => audiosSegs.add(seg.toInt()),
+          );
+          return audioPath;
+        }).toList(),
         syllables: el['syllables'].asMap().entries.map<Syllable>((entry) {
           // Create Image String
           Uint8List soundBuffer = base64Decode(
