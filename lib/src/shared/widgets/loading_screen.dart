@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototipo_app_uncisal/src/screens/tasks_list/tasks_list_screen.dart';
 
-class SuccessLevelScreen extends StatelessWidget {
+class LoadingScreen extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final String subtitle;
+
+  LoadingScreen({
+    this.imagePath,
+    this.title,
+    this.subtitle,
+  });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,14 +31,14 @@ class SuccessLevelScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
-                'assets/images/success.png',
+                this.imagePath,
                 height: 100,
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                'PARABÉNS',
+                this.title,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -41,37 +50,13 @@ class SuccessLevelScreen extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                'Você concluiu esse fonema.',
+                this.subtitle,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 30,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  Get.to(
-                    () => TasksListScreen(),
-                  );
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                color: Color.fromRGBO(
-                  222,
-                  184,
-                  33,
-                  1,
-                ),
-                textColor: Colors.white,
-                padding: EdgeInsets.all(12),
-                child: Text('Escolher outro fonema'),
-              )
             ],
           ),
         ),

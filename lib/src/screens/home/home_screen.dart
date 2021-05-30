@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/task.dart';
+import 'package:prototipo_app_uncisal/src/screens/tasks_list/tasks_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  final task;
   final tasks;
+  final nextIndex;
   HomeScreen({
+    this.task,
     this.tasks,
+    this.nextIndex,
   });
 
   @override
@@ -38,7 +43,9 @@ class HomeScreen extends StatelessWidget {
                       Container(
                         child: RaisedButton(
                           onPressed: () {
-                            Get.offNamed('/home');
+                            Get.to(
+                              () => TasksListScreen(),
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
@@ -53,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           textColor: Colors.white,
                           padding: EdgeInsets.all(12),
-                          child: Text('Voltar'),
+                          child: Text('Voltar para o fonemas'),
                         ),
                       ),
                     ],
@@ -63,7 +70,9 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Task(
-            tasks: tasks,
+            task: this.task,
+            tasks: this.tasks,
+            nextIndex: this.nextIndex,
           ),
         ],
       ),

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:prototipo_app_uncisal/src/screens/home/home_screen.dart';
+import 'package:prototipo_app_uncisal/src/screens/tasks_list/tasks_list_screen.dart';
 
 class LevelChoose extends StatefulWidget {
   @override
@@ -13,12 +10,6 @@ class LevelChoose extends StatefulWidget {
 
 class _LevelChooseState extends State<LevelChoose> {
   bool isLoading = false;
-  var tasks = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +54,8 @@ class _LevelChooseState extends State<LevelChoose> {
               Container(
                 child: RaisedButton(
                   onPressed: () async {
-                    // Get.offNamed('/task');
-                    await getTasks();
                     Get.to(
-                      () => HomeScreen(
-                        tasks: tasks,
-                      ),
+                      () => TasksListScreen(),
                     );
                   },
                   shape: RoundedRectangleBorder(
@@ -167,20 +154,5 @@ class _LevelChooseState extends State<LevelChoose> {
         ),
       ),
     );
-  }
-
-  // Get all tasks from API
-  Future<void> getTasks() async {
-    final storage = new FlutterSecureStorage();
-    var access_token = await storage.read(key: 'authentication_token');
-    var apiResponse = await http.get(
-      'https://pygus-api.herokuapp.com/tasks',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'access_token': access_token,
-      },
-    );
-    var apiResponseObject = jsonDecode(apiResponse.body);
-    tasks = apiResponseObject['data'];
   }
 }

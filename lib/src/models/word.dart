@@ -9,8 +9,9 @@ class Word {
   final Uint8List imagePath;
   final List<Syllable> syllables;
   final List<bool> syllablesChoosed;
+  List<int> audiosSegs;
 
-  const Word({
+  Word({
     this.name,
     this.audioPath,
     this.imagePath,
