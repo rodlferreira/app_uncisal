@@ -29,6 +29,8 @@ class TaskController extends GetxController {
       syllablesChoosed: task.syllables.map<bool>((syllable) {
         return true;
       }).toList(),
+      wordAudio: task.wordAudio,
+      wordAudioSegs: task.wordAudioSegs,
     );
     return localTask;
   }

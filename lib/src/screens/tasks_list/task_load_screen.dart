@@ -85,6 +85,7 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
       el = apiResponseObject['data'];
 
       List<int> audiosSegs = [];
+      int wordAudiosSegs = 0;
 
       // Create Image String
       List<int> imageBuffer = [];
@@ -93,6 +94,21 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
       });
       String imgString = base64Encode(imageBuffer);
       Uint8List imgDecoded = base64Decode(imgString);
+
+      // Create Word Audio
+      List<int> wordSoundBuffer = [];
+      el['completeWordAudio']['data']['data'].forEach((data) {
+        wordSoundBuffer.add(data);
+      });
+      String wordSoundString = base64Encode(wordSoundBuffer);
+      Uint8List wordSoundFromStringBuffer = base64Decode(wordSoundString);
+      Audio wordAudioPath = Audio.loadFromByteData(
+        ByteData.sublistView(
+          wordSoundFromStringBuffer,
+        ),
+        onDuration: (seg) => wordAudiosSegs = seg.toInt(),
+      );
+
       Word localTask = Word(
         name: el['name'],
         imagePath: imgDecoded,
@@ -128,6 +144,8 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
         syllablesChoosed: el['syllables'].map<bool>((syllable) {
           return true;
         }).toList(),
+        wordAudio: wordAudioPath,
+        wordAudioSegs: wordAudiosSegs,
       );
 
       localTask.audiosSegs = audiosSegs;

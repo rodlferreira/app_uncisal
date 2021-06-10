@@ -10,6 +10,8 @@ class Word {
   final List<Syllable> syllables;
   final List<bool> syllablesChoosed;
   List<int> audiosSegs;
+  final Audio wordAudio;
+  int wordAudioSegs;
 
   Word({
     this.name,
@@ -17,5 +19,7 @@ class Word {
     this.imagePath,
     this.syllables,
     this.syllablesChoosed,
+    this.wordAudio,
+    this.wordAudioSegs,
   });
 }

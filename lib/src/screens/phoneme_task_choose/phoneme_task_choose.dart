@@ -85,7 +85,7 @@ class _PhonemeTaskChooseState extends State<PhonemeTaskChoose> {
                           ),
                           textColor: Colors.white,
                           padding: EdgeInsets.all(12),
-                          child: Text(el.value['phoneme'].toUpperCase()),
+                          child: Text(el.value['phoneme']),
                         ),
                       ),
                     )

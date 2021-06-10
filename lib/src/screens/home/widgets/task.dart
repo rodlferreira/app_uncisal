@@ -184,25 +184,25 @@ class _TaskState extends State<Task> {
                                 Duration(
                                   seconds: 1,
                                 ), () {
-                              widget.task.audioPath[0].play();
-                              widget.task.audioPath[0]..dispose();
+                              widget.task.wordAudio.play();
+                              widget.task.wordAudio..dispose();
                             });
 
-                            for (int index = 0;
-                                index < (widget.task.audiosSegs.length - 1);
-                                index++) {
-                              await Future.delayed(
-                                  Duration(
-                                    seconds: widget.task.audiosSegs[index],
-                                  ), () {
-                                widget.task.audioPath[index + 1].play();
-                                widget.task.audioPath[index + 1]..dispose();
-                              });
-                            }
+                            // for (int index = 0;
+                            //     index < (widget.task.audiosSegs.length - 1);
+                            //     index++) {
+                            //   await Future.delayed(
+                            //       Duration(
+                            //         seconds: widget.task.audiosSegs[index],
+                            //       ), () {
+                            //     widget.task.audioPath[index + 1].play();
+                            //     widget.task.audioPath[index + 1]..dispose();
+                            //   });
+                            // }
 
                             Future.delayed(
                               Duration(
-                                seconds: 1,
+                                seconds: widget.task.wordAudioSegs,
                               ),
                               () => setState(
                                 () {

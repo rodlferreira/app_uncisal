@@ -26,11 +26,12 @@ class _TasksListScreenState extends State<TasksListScreen> {
 
     // Get all phonemes
     var phonemes = tasks.map((el) {
-      String phoneme = '';
-      el['syllables'].forEach((syllable) {
-        if (syllable['isPhoneme'] == true) phoneme = syllable['syllable'];
-      });
-      return phoneme;
+      // String phoneme = '';
+      // el['syllables'].forEach((syllable) {
+      //   if (syllable['isPhoneme'] == true) phoneme = syllable['syllable'];
+      // });
+      // return phoneme;
+      return el['phoneme'];
     });
 
     // Remove duplicated phonemes
@@ -42,10 +43,13 @@ class _TasksListScreenState extends State<TasksListScreen> {
       List localTasks = [];
 
       tasks.forEach((task) {
-        task['syllables'].forEach((syllable) {
-          if (syllable['isPhoneme'] == true && syllable['syllable'] == phoneme)
-            localTasks.add(task);
-        });
+        if (task['phoneme'] == phoneme) {
+          localTasks.add(task);
+        }
+        // task['syllables'].forEach((syllable) {
+        //   if (syllable['isPhoneme'] == true && syllable['syllable'] == phoneme)
+        //     localTasks.add(task);
+        // });
       });
 
       var elementToAdd = {
