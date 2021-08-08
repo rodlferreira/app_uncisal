@@ -53,43 +53,50 @@ class _PhonemeTaskChooseState extends State<PhonemeTaskChoose> {
                   ),
                 ),
               ),
-              Wrap(
-                children: widget.tasksByPhoneme
-                    .asMap()
-                    .entries
-                    .map<Widget>(
-                      (el) => Container(
-                        padding: EdgeInsets.only(
-                          left: 5,
-                          right: 5,
-                        ),
-                        child: RaisedButton(
-                          onPressed: () {
-                            Get.to(
-                              () => TaskLoadScreen(
-                                tasks: el.value['tasks'],
-                                index: 0,
+              Container(
+                height: MediaQuery.of(context).size.height - 250,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Wrap(
+                      children: widget.tasksByPhoneme
+                          .asMap()
+                          .entries
+                          .map<Widget>(
+                            (el) => Container(
+                              padding: EdgeInsets.only(
+                                left: 5,
+                                right: 5,
                               ),
-                            );
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                              child: RaisedButton(
+                                onPressed: () {
+                                  Get.to(
+                                    () => TaskLoadScreen(
+                                      tasks: el.value['tasks'],
+                                      index: 0,
+                                    ),
+                                  );
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                color: Color.fromRGBO(
+                                  222,
+                                  184,
+                                  33,
+                                  1,
+                                ),
+                                textColor: Colors.white,
+                                padding: EdgeInsets.all(12),
+                                child: Text(el.value['phoneme']),
+                              ),
                             ),
-                          ),
-                          color: Color.fromRGBO(
-                            222,
-                            184,
-                            33,
-                            1,
-                          ),
-                          textColor: Colors.white,
-                          padding: EdgeInsets.all(12),
-                          child: Text(el.value['phoneme']),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(

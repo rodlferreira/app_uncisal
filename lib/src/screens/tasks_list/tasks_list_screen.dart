@@ -26,11 +26,6 @@ class _TasksListScreenState extends State<TasksListScreen> {
 
     // Get all phonemes
     var phonemes = tasks.map((el) {
-      // String phoneme = '';
-      // el['syllables'].forEach((syllable) {
-      //   if (syllable['isPhoneme'] == true) phoneme = syllable['syllable'];
-      // });
-      // return phoneme;
       return el['phoneme'];
     });
 
@@ -46,10 +41,6 @@ class _TasksListScreenState extends State<TasksListScreen> {
         if (task['phoneme'] == phoneme) {
           localTasks.add(task);
         }
-        // task['syllables'].forEach((syllable) {
-        //   if (syllable['isPhoneme'] == true && syllable['syllable'] == phoneme)
-        //     localTasks.add(task);
-        // });
       });
 
       var elementToAdd = {
@@ -82,6 +73,7 @@ class _TasksListScreenState extends State<TasksListScreen> {
     var access_token = await storage.read(key: 'authentication_token');
     var apiResponse = await http.get(
       'https://pygus-api.herokuapp.com/tasks',
+      // 'http://192.168.15.9:4200/tasks',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'access_token': access_token,

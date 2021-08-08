@@ -73,6 +73,7 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
 
     var apiResponse = await http.get(
       'https://pygus-api.herokuapp.com/tasks/$id',
+      // 'http://192.168.15.9:4200/tasks/$id',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'access_token': await storage.read(key: 'authentication_token'),
@@ -87,19 +88,9 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
       List<int> audiosSegs = [];
       int wordAudiosSegs = 0;
 
-      // Create Image String
-      List<int> imageBuffer = [];
-      el['image']['data']['data'].forEach((data) {
-        imageBuffer.add(data);
-      });
-      String imgString = base64Encode(imageBuffer);
-      Uint8List imgDecoded = base64Decode(imgString);
-
       // Create Word Audio
-      List<int> wordSoundBuffer = [];
-      el['completeWordAudio']['data']['data'].forEach((data) {
-        wordSoundBuffer.add(data);
-      });
+      List<int> wordSoundBuffer =
+          el['completeWordAudio']['data']['data'].cast<int>();
       String wordSoundString = base64Encode(wordSoundBuffer);
       Uint8List wordSoundFromStringBuffer = base64Decode(wordSoundString);
       Audio wordAudioPath = Audio.loadFromByteData(
@@ -111,8 +102,9 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
 
       Word localTask = Word(
         name: el['name'],
-        imagePath: imgDecoded,
+        imagePath: widget.tasks[widget.index]['image'],
         audioPath: el['syllables'].asMap().entries.map<Audio>((entry) {
+          if (entry.key == el['audios'].length) return null;
           // Create Image String
           Uint8List soundBuffer = base64Decode(
             el['audios'][entry.key]['data'],
@@ -126,15 +118,18 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
           return audioPath;
         }).toList(),
         syllables: el['syllables'].asMap().entries.map<Syllable>((entry) {
-          // Create Image String
-          Uint8List soundBuffer = base64Decode(
-            el['audios'][entry.key]['data'],
-          );
-          Audio audioPath = Audio.loadFromByteData(
-            ByteData.sublistView(
-              soundBuffer,
-            ),
-          );
+          Audio audioPath;
+          if (entry.key < el['audios'].length) {
+            // Create Image String
+            Uint8List soundBuffer = base64Decode(
+              el['audios'][entry.key]['data'],
+            );
+            audioPath = Audio.loadFromByteData(
+              ByteData.sublistView(
+                soundBuffer,
+              ),
+            );
+          }
           return Syllable(
             name: entry.value['syllable'].toUpperCase(),
             audioPath: audioPath,

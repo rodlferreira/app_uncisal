@@ -48,7 +48,7 @@ class _TaskState extends State<Task> {
             ),
             height: 200,
             child: Center(
-              child: Image.memory(
+              child: Image.network(
                 widget.task.imagePath,
                 fit: BoxFit.contain,
                 width: 200,
@@ -156,8 +156,10 @@ class _TaskState extends State<Task> {
                         },
                         onAccept: (item) async {
                           // Play audio
-                          entry.value.audioPath.play();
-                          entry.value.audioPath..dispose();
+                          if (entry.value.audioPath != null) {
+                            entry.value.audioPath.play();
+                            entry.value.audioPath.dispose();
+                          }
 
                           // Put syllable in list of chooseds syllables
                           List<Syllable> localSyllablesChoosed =
@@ -174,31 +176,11 @@ class _TaskState extends State<Task> {
                               syllables.length) {
                             await Future.delayed(
                                 Duration(
-                                  seconds: widget.task.audiosSegs[
-                                      widget.task.audiosSegs.length - 1],
-                                ), () {
-                              audioCache.play('audios/success.mp3');
-                            });
-
-                            await Future.delayed(
-                                Duration(
-                                  seconds: 1,
+                                  milliseconds: 1500,
                                 ), () {
                               widget.task.wordAudio.play();
-                              widget.task.wordAudio..dispose();
+                              widget.task.wordAudio.dispose();
                             });
-
-                            // for (int index = 0;
-                            //     index < (widget.task.audiosSegs.length - 1);
-                            //     index++) {
-                            //   await Future.delayed(
-                            //       Duration(
-                            //         seconds: widget.task.audiosSegs[index],
-                            //       ), () {
-                            //     widget.task.audioPath[index + 1].play();
-                            //     widget.task.audioPath[index + 1]..dispose();
-                            //   });
-                            // }
 
                             Future.delayed(
                               Duration(
@@ -232,6 +214,7 @@ class _TaskState extends State<Task> {
                           onTap: () {
                             // Play audio
                             entry.value.audioPath.play();
+                            entry.value.audioPath.dispose();
                           },
                           child: syllablesChoosed != null &&
                                   syllablesChoosed.contains(entry.value)
