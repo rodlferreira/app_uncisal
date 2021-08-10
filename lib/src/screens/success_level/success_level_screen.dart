@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/tasks_list/tasks_list_screen.dart';
 
@@ -7,12 +8,7 @@ class SuccessLevelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromRGBO(
-          0,
-          143,
-          151,
-          1,
-        ),
+        backgroundColor: Color.fromRGBO(0, 143, 151, 1),
         body: Container(
           padding: EdgeInsets.all(
             20,
@@ -52,7 +48,8 @@ class SuccessLevelScreen extends StatelessWidget {
                 height: 30,
               ),
               RaisedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await DefaultCacheManager().emptyCache();
                   Get.to(
                     () => TasksListScreen(),
                   );
@@ -62,12 +59,7 @@ class SuccessLevelScreen extends StatelessWidget {
                     Radius.circular(10),
                   ),
                 ),
-                color: Color.fromRGBO(
-                  222,
-                  184,
-                  33,
-                  1,
-                ),
+                color: Color.fromRGBO(222, 184, 33, 1),
                 textColor: Colors.white,
                 padding: EdgeInsets.all(12),
                 child: Text('Escolher outro fonema'),

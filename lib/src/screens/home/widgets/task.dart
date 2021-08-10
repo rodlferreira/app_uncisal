@@ -1,10 +1,8 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:glitters/glitters.dart';
-import 'package:prototipo_app_uncisal/src/models/syllable.dart';
-import 'package:prototipo_app_uncisal/src/screens/home/task_controller.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
 import 'package:prototipo_app_uncisal/src/screens/tasks_list/task_load_screen.dart';
 
@@ -22,19 +20,8 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-  List<Syllable> syllables;
-  List<Syllable> syllablesChoosed = [];
+  List<String> syllablesChoosed = [];
   bool accepted = false;
-  final AudioCache audioCache = AudioCache();
-
-  final controller = Get.put(
-    TaskController(),
-  );
-
-  void initState() {
-    super.initState();
-    syllables = controller.createRandomSyllables(widget.task.syllables);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +77,7 @@ class _TaskState extends State<Task> {
                                   ? Stack(
                                       children: [
                                         SyllableButton(
-                                          syllable: entry.value,
+                                          syllable: entry.value.name,
                                           enable: true,
                                           isPhoneme: entry.value.isPhoneme,
                                           color: entry.value.isPhoneme
@@ -147,7 +134,7 @@ class _TaskState extends State<Task> {
                           );
                         },
                         onWillAccept: (item) {
-                          if (item == entry.value.name &&
+                          if (item == entry.value.id &&
                               entry.key == syllablesChoosed.length) {
                             return true;
                           } else {
@@ -158,13 +145,12 @@ class _TaskState extends State<Task> {
                           // Play audio
                           if (entry.value.audioPath != null) {
                             entry.value.audioPath.play();
-                            entry.value.audioPath.dispose();
                           }
 
                           // Put syllable in list of chooseds syllables
-                          List<Syllable> localSyllablesChoosed =
+                          List<String> localSyllablesChoosed =
                               syllablesChoosed != null ? syllablesChoosed : [];
-                          localSyllablesChoosed.add(entry.value);
+                          localSyllablesChoosed.add(entry.value.id);
 
                           // Reload state
                           setState(() {
@@ -173,7 +159,12 @@ class _TaskState extends State<Task> {
 
                           // Check if tasks is correct
                           if (localSyllablesChoosed.length ==
-                              syllables.length) {
+                              widget.task.syllablesSorted.length) {
+                            for (var i = 0;
+                                i < widget.task.syllables.length;
+                                i++) {
+                              widget.task.syllables[i].audioPath.dispose();
+                            }
                             await Future.delayed(
                                 Duration(
                                   milliseconds: 1500,
@@ -184,7 +175,7 @@ class _TaskState extends State<Task> {
 
                             Future.delayed(
                               Duration(
-                                seconds: widget.task.wordAudioSegs,
+                                milliseconds: 2000,
                               ),
                               () => setState(
                                 () {
@@ -204,45 +195,48 @@ class _TaskState extends State<Task> {
             padding: EdgeInsets.all(40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: syllables
+              children: widget.task.syllablesRandom
                   .asMap()
                   .entries
-                  .map<Widget>(
-                    (entry) => Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // Play audio
-                            entry.value.audioPath.play();
-                            entry.value.audioPath.dispose();
-                          },
-                          child: syllablesChoosed != null &&
-                                  syllablesChoosed.contains(entry.value)
-                              ? Container(
-                                  height: 50,
-                                )
-                              : Draggable(
-                                  child: SyllableButton(
-                                    syllable: entry.value,
-                                    color: Colors.white,
-                                  ),
-                                  feedback: Material(
-                                    child: SyllableButton(
-                                      syllable: entry.value,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  childWhenDragging: Container(),
-                                  data: entry.value.name,
+                  .map<Widget>((entry) {
+                var syllableRandom = widget.task.syllables.firstWhere(
+                    (element) => element.id == entry.value, orElse: () {
+                  return null;
+                });
+
+                return Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Play audio
+                        syllableRandom.audioPath.play();
+                      },
+                      child: syllablesChoosed != null &&
+                              syllablesChoosed.contains(syllableRandom.id)
+                          ? Container(
+                              height: 50,
+                            )
+                          : Draggable(
+                              child: SyllableButton(
+                                syllable: syllableRandom.name,
+                                color: Colors.white,
+                              ),
+                              feedback: Material(
+                                child: SyllableButton(
+                                  syllable: syllableRandom.name,
+                                  color: Colors.white,
                                 ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                      ],
+                              ),
+                              childWhenDragging: Container(),
+                              data: syllableRandom.id,
+                            ),
                     ),
-                  )
-                  .toList(),
+                    SizedBox(
+                      width: 15,
+                    ),
+                  ],
+                );
+              }).toList(),
             ),
           ),
           Align(
@@ -253,8 +247,9 @@ class _TaskState extends State<Task> {
               child: RaisedButton(
                 onPressed: accepted == false
                     ? null
-                    : () {
-                        Get.to(
+                    : () async {
+                        await DefaultCacheManager().emptyCache();
+                        Get.off(
                           () => TaskLoadScreen(
                             tasks: widget.tasks,
                             index: widget.nextIndex,
@@ -266,12 +261,7 @@ class _TaskState extends State<Task> {
                     Radius.circular(10),
                   ),
                 ),
-                color: Color.fromRGBO(
-                  222,
-                  184,
-                  33,
-                  1,
-                ),
+                color: Color.fromRGBO(222, 184, 33, 1),
                 textColor: Colors.white,
                 padding: EdgeInsets.all(12),
                 child: Text('Avançar'),

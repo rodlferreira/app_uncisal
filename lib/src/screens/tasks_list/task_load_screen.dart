@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 import 'package:prototipo_app_uncisal/src/models/word.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/home_screen.dart';
 import 'package:prototipo_app_uncisal/src/screens/success_level/success_level_screen.dart';
@@ -37,7 +34,7 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
     if (widget.index != null) {
       var task = await getOneTask();
 
-      Get.to(
+      Get.off(
         () => HomeScreen(
             task: task,
             tasks: widget.tasks,
@@ -50,7 +47,7 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
         Duration(
           seconds: 1,
         ),
-        () => Get.to(
+        () => Get.off(
           () => SuccessLevelScreen(),
         ),
       );
@@ -80,72 +77,9 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
       },
     );
     var apiResponseObject = jsonDecode(apiResponse.body);
-    var el;
 
     if (apiResponseObject['code'] != 400) {
-      el = apiResponseObject['data'];
-
-      List<int> audiosSegs = [];
-      int wordAudiosSegs = 0;
-
-      // Create Word Audio
-      List<int> wordSoundBuffer =
-          el['completeWordAudio']['data']['data'].cast<int>();
-      String wordSoundString = base64Encode(wordSoundBuffer);
-      Uint8List wordSoundFromStringBuffer = base64Decode(wordSoundString);
-      Audio wordAudioPath = Audio.loadFromByteData(
-        ByteData.sublistView(
-          wordSoundFromStringBuffer,
-        ),
-        onDuration: (seg) => wordAudiosSegs = seg.toInt(),
-      );
-
-      Word localTask = Word(
-        name: el['name'],
-        imagePath: widget.tasks[widget.index]['image'],
-        audioPath: el['syllables'].asMap().entries.map<Audio>((entry) {
-          if (entry.key == el['audios'].length) return null;
-          // Create Image String
-          Uint8List soundBuffer = base64Decode(
-            el['audios'][entry.key]['data'],
-          );
-          Audio audioPath = Audio.loadFromByteData(
-            ByteData.sublistView(
-              soundBuffer,
-            ),
-            onDuration: (seg) => audiosSegs.add(seg.toInt()),
-          );
-          return audioPath;
-        }).toList(),
-        syllables: el['syllables'].asMap().entries.map<Syllable>((entry) {
-          Audio audioPath;
-          if (entry.key < el['audios'].length) {
-            // Create Image String
-            Uint8List soundBuffer = base64Decode(
-              el['audios'][entry.key]['data'],
-            );
-            audioPath = Audio.loadFromByteData(
-              ByteData.sublistView(
-                soundBuffer,
-              ),
-            );
-          }
-          return Syllable(
-            name: entry.value['syllable'].toUpperCase(),
-            audioPath: audioPath,
-            isPhoneme: entry.value['isPhoneme'],
-          );
-        }).toList(),
-        syllablesChoosed: el['syllables'].map<bool>((syllable) {
-          return true;
-        }).toList(),
-        wordAudio: wordAudioPath,
-        wordAudioSegs: wordAudiosSegs,
-      );
-
-      localTask.audiosSegs = audiosSegs;
-
-      return localTask;
+      return Word.fromJson(apiResponseObject['data']);
     } else
       return null;
   }

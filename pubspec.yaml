@@ -21,6 +21,7 @@ dependencies:
   dotted_border: ^1.0.7
   glitters: ^0.2.0
   cached_network_image: ^2.5.1
+  flutter_cache_manager: ^2.1.2
 
 
 dev_dependencies:

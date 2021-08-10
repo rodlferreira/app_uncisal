@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/task.dart';
@@ -17,12 +18,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(
-        0,
-        143,
-        151,
-        1,
-      ),
+      backgroundColor: Color.fromRGBO(0, 143, 151, 1),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -42,8 +38,9 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Container(
                         child: RaisedButton(
-                          onPressed: () {
-                            Get.to(
+                          onPressed: () async {
+                            await DefaultCacheManager().emptyCache();
+                            Get.off(
                               () => TasksListScreen(),
                             );
                           },
@@ -52,15 +49,25 @@ class HomeScreen extends StatelessWidget {
                               Radius.circular(10),
                             ),
                           ),
-                          color: Color.fromRGBO(
-                            222,
-                            184,
-                            33,
-                            1,
-                          ),
+                          color: Color.fromRGBO(222, 184, 33, 1),
                           textColor: Colors.white,
                           padding: EdgeInsets.all(12),
                           child: Text('Voltar para o fonemas'),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        child: RaisedButton(
+                          onPressed: null,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          color: Color.fromRGBO(222, 184, 33, 1),
+                          textColor: Colors.white,
+                          padding: EdgeInsets.all(12),
+                          child: Text(task.phoneme),
                         ),
                       ),
                     ],

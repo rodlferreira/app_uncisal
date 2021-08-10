@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:glitters/glitters.dart';
-import 'package:prototipo_app_uncisal/src/models/syllable.dart';
 
 class SyllableButton extends StatefulWidget {
-  Syllable syllable;
+  String syllable;
   bool enable;
   bool isPhoneme;
   Color color;
@@ -49,7 +48,7 @@ class _SyllableButtonState extends State<SyllableButton> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                widget.syllable.name,
+                widget.syllable,
                 style: TextStyle(
                   fontSize: 18,
                   color: widget.isPhoneme == true ? Colors.white : null,

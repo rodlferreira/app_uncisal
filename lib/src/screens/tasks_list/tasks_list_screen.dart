@@ -22,34 +22,7 @@ class _TasksListScreenState extends State<TasksListScreen> {
   }
 
   void getTasks() async {
-    var tasks = await getAllTasks();
-
-    // Get all phonemes
-    var phonemes = tasks.map((el) {
-      return el['phoneme'];
-    });
-
-    // Remove duplicated phonemes
-    phonemes = phonemes.toSet().toList();
-
-    // Create list of all tasks by phoneme
-    List tasksByPhoneme = [];
-    phonemes.forEach((phoneme) {
-      List localTasks = [];
-
-      tasks.forEach((task) {
-        if (task['phoneme'] == phoneme) {
-          localTasks.add(task);
-        }
-      });
-
-      var elementToAdd = {
-        'phoneme': phoneme,
-        'tasks': localTasks,
-      };
-
-      tasksByPhoneme.add(elementToAdd);
-    });
+    var tasksByPhoneme = await getAllTasks();
 
     Get.to(
       () => PhonemeTaskChoose(
@@ -70,13 +43,13 @@ class _TasksListScreenState extends State<TasksListScreen> {
   // Get all tasks from API
   Future<List> getAllTasks() async {
     final storage = new FlutterSecureStorage();
-    var access_token = await storage.read(key: 'authentication_token');
+    var accessToken = await storage.read(key: 'authentication_token');
     var apiResponse = await http.get(
       'https://pygus-api.herokuapp.com/tasks',
       // 'http://192.168.15.9:4200/tasks',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'access_token': access_token,
+        'access_token': accessToken,
       },
     );
     var apiResponseObject = jsonDecode(apiResponse.body);
