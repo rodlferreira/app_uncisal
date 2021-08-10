@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginForm extends StatefulWidget {
+class SignupForm extends StatefulWidget {
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _SignupFormState createState() => _SignupFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignupFormState extends State<SignupForm> {
   bool isLoading = false;
 
   final TextEditingController email = TextEditingController();
 
   final TextEditingController password = TextEditingController();
+
+  final TextEditingController repeatPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,24 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            padding: EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: Text(
+              'Cadastre-se',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              bottom: 30,
+            ),
+            child: Text('Informe o seu e-mail e senha para cadastrar'),
+          ),
           Container(
             padding: EdgeInsets.only(bottom: 6),
             child: TextField(
@@ -65,6 +85,26 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           Container(
+            padding: EdgeInsets.only(bottom: 12),
+            child: TextField(
+              obscureText: true,
+              controller: repeatPassword,
+              decoration: InputDecoration(
+                hintText: 'Repita a Senha',
+                filled: true,
+                fillColor: Color(0xffececec),
+                contentPadding: EdgeInsets.fromLTRB(14, 3, 8, 3),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
             width: double.infinity,
             child: RaisedButton(
               shape: RoundedRectangleBorder(
@@ -77,7 +117,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: EdgeInsets.all(12),
               child: !isLoading
                   ? Text(
-                      'Entrar',
+                      'Cadastrar',
                       style: TextStyle(fontSize: 16),
                     )
                   : SizedBox(
@@ -90,7 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
               onPressed: () async {
-                // Loading login button
+                // Loading signup button
                 setState(() {
                   isLoading = true;
                 });
@@ -104,17 +144,20 @@ class _LoginFormState extends State<LoginForm> {
                   msg = 'Informe um e-mail';
                 } else if (password.text == '') {
                   msg = 'Informe uma senha';
+                } else if (repeatPassword.text != password.text) {
+                  msg = 'As senhas devem ser iguais';
                 } else {
-                  // Call api to login
+                  // Call api to register
                   var apiResponse = await http.post(
-                    'https://pygus-api.herokuapp.com/auth/login',
-                    // 'http://192.168.15.9:4200/auth/login',
+                    'https://pygus-api.herokuapp.com/auth/register',
+                    // 'http://192.168.15.9:4200/auth/register',
                     headers: {
                       'Content-Type': 'application/json; charset=UTF-8',
                     },
                     body: jsonEncode({
                       'email': email.text,
                       'password': password.text,
+                      'isAdmin': false
                     }),
                   );
                   var apiResponseObject = jsonDecode(apiResponse.body);
@@ -135,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
 
                 // Show erro message in snackbar
                 if (msg != '') {
-                  // Close loading login button
+                  // Close loading signup button
                   setState(() {
                     isLoading = false;
                   });
@@ -155,15 +198,15 @@ class _LoginFormState extends State<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Text('Não tem conta? '),
+                  child: Text('Voltar para o '),
                 ),
                 Container(
                   child: GestureDetector(
                     onTap: () {
-                      Get.offNamed('/signup');
+                      Get.offNamed('/login');
                     },
                     child: Text(
-                      'Registre-se',
+                      'Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

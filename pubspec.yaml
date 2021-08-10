@@ -12,9 +12,16 @@ dependencies:
     sdk: flutter
   # cupertino_icons: ^1.0.0
 
-  get: ^3.15.0
+  get: ^3.26.0
   audioplayers: ^0.16.2
+  audiofileplayer: ^1.3.3
   file_picker: ^2.0.11
+  http: ^0.12.2
+  flutter_secure_storage: ^3.3.5
+  dotted_border: ^1.0.7
+  glitters: ^0.2.0
+  cached_network_image: ^2.5.1
+  flutter_cache_manager: ^2.1.2
 
 
 dev_dependencies:
@@ -26,5 +33,8 @@ flutter:
 #  uses-material-designe: true
   assets:
     - assets/images/logo/Pygus.jpg
-    - assets/images/words/boca.jpg
-    - assets/audio/bo.mp3
+    - assets/images/logo/pygus-logo.png
+    - assets/images/success.png
+    - assets/images/task_loading.png
+    - assets/images/task_one_loading.png
+    - assets/audios/success.mp3

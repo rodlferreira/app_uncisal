@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:prototipo_app_uncisal/src/config/initial_bindings.dart';
 
 import 'src/config/routes.dart';
 
@@ -14,7 +13,6 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       getPages: routes,
       initialRoute: '/',
-      initialBinding: InitialBindings(),
     );
   }
 }
