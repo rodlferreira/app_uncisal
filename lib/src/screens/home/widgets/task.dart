@@ -33,12 +33,13 @@ class _TaskState extends State<Task> {
             decoration: BoxDecoration(
               color: Colors.white,
             ),
-            height: 200,
+            height: MediaQuery.of(context).size.height - 290,
+            // height: 200,
             child: Center(
               child: Image.network(
                 widget.task.imagePath,
                 fit: BoxFit.contain,
-                width: 200,
+                // width: 200,
               ),
             ),
           ),
@@ -192,7 +193,7 @@ class _TaskState extends State<Task> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(40),
+            padding: EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: widget.task.syllablesRandom
