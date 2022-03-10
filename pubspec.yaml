@@ -1,7 +1,7 @@
 name: prototipo_app_uncisal
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -23,18 +23,18 @@ dependencies:
   cached_network_image: ^2.5.1
   flutter_cache_manager: ^2.1.2
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 flutter:
   uses-material-design: true
 
-#  uses-material-designe: true
+  #  uses-material-designe: true
   assets:
     - assets/images/logo/Pygus.jpg
     - assets/images/logo/pygus-logo.png
     - assets/images/success.png
     - assets/images/task_loading.png
     - assets/images/task_one_loading.png
+    - assets/images/CTM3.png
     - assets/audios/success.mp3

@@ -149,6 +149,11 @@ class _LevelChooseState extends State<LevelChoose> {
                   },
                 ),
               ),
+              SizedBox(height: 40),
+              Image.asset(
+                'assets/images/CTM3.png',
+                height: 70,
+              ),
             ],
           ),
         ),
