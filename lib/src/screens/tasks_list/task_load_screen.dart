@@ -69,7 +69,7 @@ class _TaskLoadScreenState extends State<TaskLoadScreen> {
     String id = widget.tasks[widget.index]['_id'];
 
     var apiResponse = await http.get(
-      'https://pygus-api.herokuapp.com/tasks/$id',
+      'http://3.84.119.50:3000/tasks/$id',
       // 'http://192.168.15.9:4200/tasks/$id',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',

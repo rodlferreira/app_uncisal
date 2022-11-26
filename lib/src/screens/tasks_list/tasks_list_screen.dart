@@ -45,7 +45,7 @@ class _TasksListScreenState extends State<TasksListScreen> {
     final storage = new FlutterSecureStorage();
     var accessToken = await storage.read(key: 'authentication_token');
     var apiResponse = await http.get(
-      'https://pygus-api.herokuapp.com/tasks',
+      'http://3.84.119.50:3000/tasks',
       // 'http://192.168.15.9:4200/tasks',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
