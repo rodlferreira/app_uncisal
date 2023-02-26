@@ -29,19 +29,10 @@ class _SyllableButtonState extends State<SyllableButton> {
         children: [
           Container(
             decoration: BoxDecoration(
-              // borderRadius: BorderRadius.all(
-              //   Radius.circular(5),
-              // ),
               border: Border.all(
                 width: 1,
-                color: Color.fromRGBO(
-                  0,
-                  143,
-                  151,
-                  1,
-                ),
+                color: Color.fromRGBO(0, 143, 151, 1),
               ),
-              // color: widget.isFonetic == true ? Colors.green : Colors.white,
               color: widget.color,
             ),
             padding: EdgeInsets.all(10),
@@ -52,7 +43,6 @@ class _SyllableButtonState extends State<SyllableButton> {
                 style: TextStyle(
                   fontSize: 18,
                   color: widget.isPhoneme == true ? Colors.white : null,
-                  // fontWeight: widget.isPhoneme == true ? FontWeight.bold : null,
                 ),
               ),
             ),

@@ -47,22 +47,29 @@ class SuccessLevelScreen extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              RaisedButton(
-                onPressed: () async {
+              InkWell(
+                onTap: () async {
                   await DefaultCacheManager().emptyCache();
                   Get.to(
                     () => TasksListScreen(),
                   );
                 },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: Color.fromRGBO(222, 184, 33, 1),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    'Escolher outro fonema',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                color: Color.fromRGBO(222, 184, 33, 1),
-                textColor: Colors.white,
-                padding: EdgeInsets.all(12),
-                child: Text('Escolher outro fonema'),
               )
             ],
           ),

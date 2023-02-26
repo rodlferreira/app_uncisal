@@ -66,9 +66,10 @@ class _PhonemeTaskChooseState extends State<PhonemeTaskChoose> {
                               padding: EdgeInsets.only(
                                 left: 5,
                                 right: 5,
+                                bottom: 10,
                               ),
-                              child: RaisedButton(
-                                onPressed: () {
+                              child: InkWell(
+                                onTap: () {
                                   Get.to(
                                     () => TaskLoadScreen(
                                       tasks: el.value['tasks'],
@@ -76,20 +77,22 @@ class _PhonemeTaskChooseState extends State<PhonemeTaskChoose> {
                                     ),
                                   );
                                 },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    color: Color.fromRGBO(222, 184, 33, 1),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: Text(
+                                    el.value['phoneme'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                color: Color.fromRGBO(
-                                  222,
-                                  184,
-                                  33,
-                                  1,
-                                ),
-                                textColor: Colors.white,
-                                padding: EdgeInsets.all(12),
-                                child: Text(el.value['phoneme']),
                               ),
                             ),
                           )
@@ -102,15 +105,23 @@ class _PhonemeTaskChooseState extends State<PhonemeTaskChoose> {
                 padding: EdgeInsets.only(
                   top: 20,
                 ),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+                child: InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Escolher outro nível',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  padding: EdgeInsets.all(12),
-                  child: Text('Escolher outro nível'),
-                  onPressed: () {
+                  onTap: () {
                     Get.offNamed('/home');
                   },
                 ),

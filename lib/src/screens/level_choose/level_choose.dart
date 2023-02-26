@@ -15,12 +15,7 @@ class _LevelChooseState extends State<LevelChoose> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromRGBO(
-          0,
-          143,
-          151,
-          1,
-        ),
+        backgroundColor: Color.fromRGBO(0, 143, 151, 1),
         body: Container(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -52,89 +47,109 @@ class _LevelChooseState extends State<LevelChoose> {
                 ),
               ),
               Container(
-                child: RaisedButton(
-                  onPressed: () async {
+                child: InkWell(
+                  onTap: () async {
                     Get.to(
                       () => TasksListScreen(),
                     );
                   },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      color: Color.fromRGBO(222, 184, 33, 1),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Nível 1',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  color: Color.fromRGBO(
-                    222,
-                    184,
-                    33,
-                    1,
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                child: InkWell(
+                  onTap: null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      color: Color.fromRGBO(222, 184, 33, 1),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Nível 2',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  textColor: Colors.white,
-                  padding: EdgeInsets.all(12),
-                  child: Text('Nível 1'),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                child: InkWell(
+                  onTap: null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      color: Color.fromRGBO(222, 184, 33, 1),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Nível 3',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
               Container(
-                child: RaisedButton(
-                  onPressed: null,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+                padding: EdgeInsets.only(top: 20),
+                child: InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        !isLoading
+                            ? Container()
+                            : Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        Text(
+                          'Sair',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
                     ),
                   ),
-                  color: Color.fromRGBO(
-                    222,
-                    184,
-                    33,
-                    1,
-                  ),
-                  textColor: Colors.white,
-                  padding: EdgeInsets.all(12),
-                  child: Text('Nível 2'),
-                ),
-              ),
-              Container(
-                child: RaisedButton(
-                  onPressed: null,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  color: Color.fromRGBO(
-                    222,
-                    184,
-                    33,
-                    1,
-                  ),
-                  textColor: Colors.white,
-                  padding: EdgeInsets.all(12),
-                  child: Text('Nível 3'),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                  top: 20,
-                ),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  padding: EdgeInsets.all(12),
-                  child: !isLoading
-                      ? Text('Sair')
-                      : SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black,
-                            ),
-                          ),
-                        ),
-                  onPressed: () async {
+                  onTap: () async {
                     // Loading button
                     setState(() {
                       isLoading = true;

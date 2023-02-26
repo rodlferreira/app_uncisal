@@ -106,30 +106,44 @@ class _SignupFormState extends State<SignupForm> {
           ),
           Container(
             width: double.infinity,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+            child: InkWell(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  color: Color.fromRGBO(0, 143, 151, 1.0),
+                ),
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    !isLoading
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                    Text(
+                      'Cadastrar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
                 ),
               ),
-              color: Color.fromRGBO(0, 143, 151, 1.0),
-              textColor: Colors.white,
-              padding: EdgeInsets.all(12),
-              child: !isLoading
-                  ? Text(
-                      'Cadastrar',
-                      style: TextStyle(fontSize: 16),
-                    )
-                  : SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.white,
-                        ),
-                      ),
-                    ),
-              onPressed: () async {
+              onTap: () async {
                 // Loading signup button
                 setState(() {
                   isLoading = true;
@@ -149,8 +163,10 @@ class _SignupFormState extends State<SignupForm> {
                 } else {
                   // Call api to register
                   var apiResponse = await http.post(
-                    'http://3.84.119.50:3000/auth/register',
-                    // 'http://192.168.15.9:4200/auth/register',
+                    Uri.parse(
+                      'https://pygus-api.herokuapp.com/auth/register',
+                      // 'http://192.168.15.9:4200/auth/register',
+                    ),
                     headers: {
                       'Content-Type': 'application/json; charset=UTF-8',
                     },
@@ -183,7 +199,7 @@ class _SignupFormState extends State<SignupForm> {
                     isLoading = false;
                   });
 
-                  Scaffold.of(context).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(msg),
                     ),

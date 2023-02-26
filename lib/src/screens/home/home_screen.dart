@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/task.dart';
 import 'package:prototipo_app_uncisal/src/screens/tasks_list/tasks_list_screen.dart';
@@ -36,38 +35,48 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        child: RaisedButton(
-                          onPressed: () async {
-                            await DefaultCacheManager().emptyCache();
-                            Get.off(
-                              () => TasksListScreen(),
-                            );
-                          },
-                          shape: RoundedRectangleBorder(
+                      InkWell(
+                        onTap: () async {
+                          await DefaultCacheManager().emptyCache();
+                          Get.off(
+                            () => TasksListScreen(),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
+                            color: Color.fromRGBO(222, 184, 33, 1),
                           ),
-                          color: Color.fromRGBO(222, 184, 33, 1),
-                          textColor: Colors.white,
                           padding: EdgeInsets.all(12),
-                          child: Text('Voltar para o fonemas'),
+                          child: Text(
+                            'Voltar para o fonemas',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       SizedBox(width: 10),
-                      Container(
-                        child: RaisedButton(
-                          onPressed: null,
-                          shape: RoundedRectangleBorder(
+                      InkWell(
+                        onTap: null,
+                        child: Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
+                            color: Color.fromRGBO(222, 184, 33, 1),
                           ),
-                          color: Color.fromRGBO(222, 184, 33, 1),
-                          textColor: Colors.white,
                           padding: EdgeInsets.all(12),
-                          child: Text(task.phoneme),
+                          child: Text(
+                            task.phoneme,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ],

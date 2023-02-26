@@ -245,8 +245,8 @@ class _TaskState extends State<Task> {
             child: Container(
               padding: EdgeInsets.fromLTRB(30, 10, 30, 5),
               width: double.infinity,
-              child: RaisedButton(
-                onPressed: accepted == false
+              child: InkWell(
+                onTap: accepted == false
                     ? null
                     : () async {
                         await DefaultCacheManager().emptyCache();
@@ -257,15 +257,22 @@ class _TaskState extends State<Task> {
                           ),
                         );
                       },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: Color.fromRGBO(222, 184, 33, 1),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    'Avançar',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                color: Color.fromRGBO(222, 184, 33, 1),
-                textColor: Colors.white,
-                padding: EdgeInsets.all(12),
-                child: Text('Avançar'),
               ),
             ),
           ),
