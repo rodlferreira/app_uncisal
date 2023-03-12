@@ -164,8 +164,8 @@ class _SignupFormState extends State<SignupForm> {
                   // Call api to register
                   var apiResponse = await http.post(
                     Uri.parse(
-                      'https://pygus-api.herokuapp.com/auth/register',
-                      // 'http://192.168.15.9:4200/auth/register',
+                      // 'https://pygus-api.herokuapp.com/auth/register',
+                      'http://191.101.18.67:3000/auth/register',
                     ),
                     headers: {
                       'Content-Type': 'application/json; charset=UTF-8',

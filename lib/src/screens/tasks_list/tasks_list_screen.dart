@@ -46,8 +46,8 @@ class _TasksListScreenState extends State<TasksListScreen> {
     var accessToken = await storage.read(key: 'authentication_token');
     var apiResponse = await http.get(
       Uri.parse(
-        'https://pygus-api.herokuapp.com/tasks',
-        // 'http://192.168.15.9:4200/tasks',
+        // 'https://pygus-api.herokuapp.com/tasks',
+        'http://191.101.18.67:3000/tasks',
       ),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
