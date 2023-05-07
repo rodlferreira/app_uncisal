@@ -1,9 +1,8 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:math';
 
 import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:prototipo_app_uncisal/src/models/syllable.dart';
+import 'package:prototipo_app_uncisal/src/services/api.dart';
 
 class Word {
   final String name;
@@ -28,16 +27,8 @@ class Word {
 // convert Json to a Model
   factory Word.fromJson(Map<String, dynamic> json) {
     // Create Word Audio
-    List<int> wordSoundBuffer =
-        json['completeWordAudio']['data']['data'].cast<int>();
-    String wordSoundString = base64Encode(wordSoundBuffer);
-    Uint8List wordSoundFromStringBuffer = base64Decode(wordSoundString);
-    Audio wordAudio = Audio.loadFromByteData(
-      ByteData.sublistView(
-        wordSoundFromStringBuffer,
-      ),
-      // onDuration: (seg) => wordAudiosSegs = seg.toInt(),
-    );
+    Audio wordAudio =
+        Audio.loadFromRemoteUrl(ApiService.getTaskAudio(json['name']));
 
     // Random syllables
     Random random = Random();
@@ -60,17 +51,8 @@ class Word {
       imagePath: json['image'] as String,
       phoneme: json['phoneme'] as String,
       syllables: json['syllables'].asMap().entries.map<Syllable>((entry) {
-        if (entry.key == json['audios'].length) return null;
-        // Create Audio
-        Uint8List soundBuffer = base64Decode(
-          json['audios'][entry.key]['data'],
-        );
-        Audio audioPath = Audio.loadFromByteData(
-          ByteData.sublistView(
-            soundBuffer,
-          ),
-          // onDuration: (seg) => audiosSegs.add(seg.toInt()),
-        );
+        Audio audioPath = Audio.loadFromRemoteUrl(ApiService.getSyllableAudio(
+            json['name'], json['syllables'][entry.key]['syllable']));
 
         return Syllable(
           id: entry.value['_id'],

@@ -28,8 +28,15 @@ class ApiService {
     return '$apiUrl/public/tasks_images/$taskNameWithoutDiacritic.png';
   }
 
+  static String getTaskAudio(String taskName) {
+    String taskNameWithoutDiacritic = removeDiacritics(taskName);
+    return '$apiUrl/public/tasks_complete_audios/$taskNameWithoutDiacritic.mp3';
+  }
+
   static String getSyllableAudio(String taskName, String syllable) {
-    return '$apiUrl/public/tasks_audios/$taskName/$syllable.mp3';
+    String taskNameWithoutDiacritic = removeDiacritics(taskName);
+    String syllableWithoutDiacritic = removeDiacritics(syllable);
+    return '$apiUrl/public/tasks_audios/$taskNameWithoutDiacritic/$syllableWithoutDiacritic.mp3';
   }
 
   static Future<List<dynamic>> getAllTasks() async {
