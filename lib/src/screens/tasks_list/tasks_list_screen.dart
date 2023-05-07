@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:prototipo_app_uncisal/src/screens/phoneme_task_choose/phoneme_task_choose.dart';
+import 'package:prototipo_app_uncisal/src/services/api.dart';
 import 'package:prototipo_app_uncisal/src/shared/widgets/loading_screen.dart';
-
-import 'package:http/http.dart' as http;
 
 class TasksListScreen extends StatefulWidget {
   @override
@@ -42,19 +38,7 @@ class _TasksListScreenState extends State<TasksListScreen> {
 
   // Get all tasks from API
   Future<List> getAllTasks() async {
-    final storage = new FlutterSecureStorage();
-    var accessToken = await storage.read(key: 'authentication_token');
-    var apiResponse = await http.get(
-      Uri.parse(
-        // 'https://pygus-api.herokuapp.com/tasks',
-        'http://191.101.18.67:3000/tasks',
-      ),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'access_token': accessToken,
-      },
-    );
-    var apiResponseObject = jsonDecode(apiResponse.body);
-    return apiResponseObject['data'];
+    var response = await ApiService.getAllTasks();
+    return response;
   }
 }

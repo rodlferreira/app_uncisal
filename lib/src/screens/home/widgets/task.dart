@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:glitters/glitters.dart';
+import 'package:prototipo_app_uncisal/src/models/word.dart';
 import 'package:prototipo_app_uncisal/src/screens/home/widgets/syllable_button.dart';
 import 'package:prototipo_app_uncisal/src/screens/tasks_list/task_load_screen.dart';
+import 'package:prototipo_app_uncisal/src/services/api.dart';
 
 class Task extends StatefulWidget {
-  final task;
+  final Word task;
   final tasks;
   final nextIndex;
   Task({
@@ -37,7 +39,7 @@ class _TaskState extends State<Task> {
             // height: 200,
             child: Center(
               child: Image.network(
-                widget.task.imagePath,
+                ApiService.getTaskImage(widget.task.name),
                 fit: BoxFit.contain,
                 // width: 200,
               ),
